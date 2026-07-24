@@ -27,3 +27,57 @@ input:focus,select:focus,textarea:focus{border-color:var(--ak-red)!important;box
 /* Smart toolkit */
 .topbar,.module-card,.tool-card,.panel,.modal-content,.result-card,.input-card,.section-card{border-color:var(--ak-line)!important}.logo-text,.topbar h1,.hero-title{background:linear-gradient(90deg,#fff,#ff8a90,#ff3038)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}.module-btn,.primary-btn,.run-btn,.action-btn.primary{background:linear-gradient(90deg,#720811,#ff3038)!important;color:#fff!important}.module-card:hover,.tool-card:hover{border-color:rgba(255,48,56,.55)!important;box-shadow:0 18px 48px rgba(100,0,8,.28)!important}
 @media(max-width:700px){.ak-module-corner{left:8px;bottom:8px;padding:7px 9px}.ak-module-corner span{display:none}}
+
+/* === AKATSUKI FORCE THEME — Publisher Report Builder === */
+html[data-theme="dark"],html[data-theme="light"]{
+  --bg:#050506!important;--bg-deep:#100406!important;--panel:rgba(18,9,11,.92)!important;
+  --panel-strong:#16090c!important;--panel-soft:rgba(10,7,8,.9)!important;
+  --input:#0d090a!important;--input-hover:#170c0e!important;
+  --text:#fff5f6!important;--text-soft:#e4c9cc!important;--muted:#b89095!important;--faint:#7f6267!important;
+  --line:rgba(255,55,65,.34)!important;--line-soft:rgba(255,255,255,.09)!important;--line-strong:rgba(255,61,71,.68)!important;
+  --purple:#ff3540!important;--purple-2:#b50d19!important;--blue:#ff5260!important;--cyan:#ff7a83!important;
+  --teal:#ff414c!important;--green:#ff6b73!important;--orange:#ff8b45!important;--orange-2:#ffad58!important;
+  --pink:#ff5c87!important;--danger:#ff3d56!important;--warning:#ffc05c!important;
+  --grid:rgba(255,64,72,.035)!important; color-scheme:dark!important;
+}
+html[data-theme="light"]{color-scheme:dark!important}
+body{
+  background:
+    linear-gradient(rgba(4,4,5,.86),rgba(12,3,5,.91)),
+    url('../../assets/akatsuki-background.png') center/cover fixed!important;
+}
+.page-grid{background-image:linear-gradient(rgba(255,62,70,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,62,70,.035) 1px,transparent 1px)!important}
+.ambient{opacity:.18!important;filter:hue-rotate(100deg) saturate(3)!important}
+.app-header,.logic-bar,.workflow-card,.results-card,.glass-panel{
+  background:linear-gradient(145deg,rgba(23,11,14,.95),rgba(7,6,7,.93))!important;
+  border-color:rgba(255,58,68,.28)!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.025)!important;
+}
+.brand-lockup h1{color:#fff!important}.brand-lockup h1 span{color:#ff3c47!important;text-shadow:0 0 18px rgba(255,54,64,.24)!important}
+.brand-mark,.upload-orb,.logic-icon,.step-chip{
+  background:linear-gradient(145deg,#3b0a10,#b20d19)!important;
+  border-color:rgba(255,72,82,.42)!important;color:#fff!important;
+  box-shadow:0 10px 28px rgba(125,0,10,.3),inset 0 1px rgba(255,255,255,.08)!important;
+}
+.logic-item strong,.heading-copy h2,.subsection-heading h3,.results-heading h2{color:#fff5f6!important}
+.logic-item span,.heading-copy p,.app-footer,.field-control>span{color:#bd969b!important}
+.upload-zone,.file-info,.advanced-panel,.metric-card,.table-shell,.notice-card,.unmapped-panel{
+  background:rgba(11,8,9,.84)!important;border-color:rgba(255,62,71,.18)!important;
+}
+.upload-zone:hover{border-color:#ff3944!important;background:rgba(32,10,14,.82)!important}
+.button-primary,.button-download{
+  background:linear-gradient(100deg,#6d0710,#d31522 55%,#ff3b45)!important;color:#fff!important;
+  box-shadow:0 13px 34px rgba(135,0,11,.32)!important;
+}
+.button-secondary,.button-ghost,.icon-button{
+  background:rgba(255,255,255,.035)!important;color:#f7e8ea!important;border:1px solid rgba(255,61,70,.19)!important;
+}
+.button:hover{transform:translateY(-2px)!important}
+.text-control,.select-control,input,select{
+  background:#0d090a!important;color:#fff!important;border-color:rgba(255,67,76,.2)!important;
+}
+.preview-table thead th{background:linear-gradient(90deg,#6b0710,#b70e1a)!important;color:#fff!important}
+.preview-table tbody td{background:rgba(10,8,9,.86)!important;color:#eedcdf!important;border-color:rgba(255,255,255,.07)!important}
+.metric-card strong{color:#fff!important}.metric-card span{color:#b98e94!important}
+.reference-badge{background:rgba(72,7,13,.26)!important;border-color:rgba(255,59,68,.22)!important}
+.status-dot{background:#ff3944!important;box-shadow:0 0 12px rgba(255,57,68,.72)!important}

@@ -1,0 +1,12 @@
+AKATSUKI THEME FIX
+
+Updated only the visual theme integration for:
+- Publisher Report Builder
+- CGS & Data Loader
+
+Changes:
+- Strong red/black Akatsuki variables and backgrounds
+- Akatsuki themed panels, buttons, tabs, cards, inputs and tables
+- Cache-busting added to theme CSS/JS references
+
+Business logic, data processing, upload, export and module flow were not changed.
