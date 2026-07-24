@@ -939,22 +939,31 @@
     worksheet.getRow(1).height = 28;
 
     worksheet.mergeCells('A2:F2');
-    worksheet.getCell('A2').value = 'Pie chart uses Total = Enquiry + Registration + Admission. Table below shows exact counts by broad Type.';
+    worksheet.getCell('A2').value = 'Three separate pie charts show broad Type share for Enquiry, Registration and Admission. The table below shows exact counts.';
     worksheet.getCell('A2').font = { name: 'Calibri', size: 10, italic: true, color: { argb: 'FF4B5563' } };
     worksheet.getCell('A2').alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
-    worksheet.getRow(2).height = 24;
+    worksheet.getRow(2).height = 28;
 
-    const chartDataUrl = await createTypePieChartDataUrl(rows, totals);
-    const chartImageId = workbook.addImage({ base64: chartDataUrl, extension: 'png' });
-    worksheet.addImage(chartImageId, {
-      tl: { col: 0, row: 3 },
-      ext: { width: 900, height: 390 }
-    });
-    for (let rowNumber = 4; rowNumber <= 23; rowNumber += 1) {
+    const chartSpecs = [
+      { metric: 'enquiry', title: 'Enquiry by Broad Type', total: totals.enquiry, row: 3 },
+      { metric: 'registration', title: 'Registration by Broad Type', total: totals.registration, row: 22 },
+      { metric: 'admission', title: 'Admission by Broad Type', total: totals.admission, row: 41 }
+    ];
+
+    for (const spec of chartSpecs) {
+      const chartDataUrl = await createTypePieChartDataUrl(rows, spec.metric, spec.title, spec.total);
+      const chartImageId = workbook.addImage({ base64: chartDataUrl, extension: 'png' });
+      worksheet.addImage(chartImageId, {
+        tl: { col: 0, row: spec.row },
+        ext: { width: 900, height: 330 }
+      });
+    }
+
+    for (let rowNumber = 4; rowNumber <= 59; rowNumber += 1) {
       worksheet.getRow(rowNumber).height = 17;
     }
 
-    const tableStartRow = 26;
+    const tableStartRow = 62;
     const headers = ['Type', 'Enquiry', 'Registration', 'Admission', 'Total', 'Share'];
     headers.forEach((header, index) => {
       const cell = worksheet.getCell(tableStartRow, index + 1);
@@ -1005,7 +1014,8 @@
     worksheet.getRow(totalRowNumber).height = 22;
 
     worksheet.autoFilter = `A${tableStartRow}:F${Math.max(totalRowNumber, tableStartRow)}`;
-    worksheet.views = [{ state: 'frozen', ySplit: tableStartRow }];
+    // No frozen rows/panes: the complete worksheet remains freely scrollable.
+    worksheet.views = [{ state: 'normal' }];
     worksheet.pageSetup = {
       orientation: 'landscape',
       paperSize: 9,
@@ -1014,13 +1024,13 @@
       fitToHeight: 0,
       margins: { left: 0.25, right: 0.25, top: 0.5, bottom: 0.5, header: 0.2, footer: 0.2 }
     };
-    worksheet.pageSetup.printArea = `A1:I${Math.max(totalRowNumber, 26)}`;
+    worksheet.pageSetup.printArea = `A1:I${Math.max(totalRowNumber, tableStartRow)}`;
   }
 
-  function createTypePieChartDataUrl(rows, totals) {
+  function createTypePieChartDataUrl(rows, metric, title, suppliedTotal) {
     const canvas = document.createElement('canvas');
     const width = 900;
-    const height = 390;
+    const height = 330;
     const scale = 2;
     canvas.width = width * scale;
     canvas.height = height * scale;
@@ -1040,34 +1050,36 @@
     ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = '#111827';
     ctx.font = 'bold 22px Calibri, Arial, sans-serif';
-    ctx.fillText('Broad Type Share', 34, 38);
+    ctx.fillText(title, 34, 36);
     ctx.font = '12px Calibri, Arial, sans-serif';
     ctx.fillStyle = '#6B7280';
-    ctx.fillText('Total = Enquiry + Registration + Admission', 34, 58);
+    ctx.fillText(`Broad Type share based only on ${title.replace(' by Broad Type', '')}`, 34, 56);
 
-    const chartRows = rows.filter((row) => row.total > 0);
-    const grandTotal = totals && totals.total ? totals.total : chartRows.reduce((sum, row) => sum + row.total, 0);
+    const chartRows = rows
+      .map((row) => ({ type: row.type, value: Number(row[metric]) || 0 }))
+      .filter((row) => row.value > 0);
+    const grandTotal = suppliedTotal || chartRows.reduce((sum, row) => sum + row.value, 0);
 
     if (!chartRows.length || !grandTotal) {
       ctx.fillStyle = '#F3F4F6';
       ctx.beginPath();
-      ctx.arc(230, 210, 118, 0, Math.PI * 2);
+      ctx.arc(230, 185, 104, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = '#6B7280';
       ctx.font = 'bold 20px Calibri, Arial, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('No activity found', 230, 216);
+      ctx.fillText('No activity found', 230, 191);
       ctx.textAlign = 'left';
       return canvas.toDataURL('image/png');
     }
 
     const centerX = 230;
-    const centerY = 214;
-    const radius = 126;
+    const centerY = 188;
+    const radius = 108;
     let startAngle = -Math.PI / 2;
 
     chartRows.forEach((row, index) => {
-      const angle = (row.total / grandTotal) * Math.PI * 2;
+      const angle = (row.value / grandTotal) * Math.PI * 2;
       const endAngle = startAngle + angle;
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
@@ -1082,21 +1094,21 @@
     });
 
     ctx.beginPath();
-    ctx.arc(centerX, centerY, 54, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, 48, 0, Math.PI * 2);
     ctx.fillStyle = '#FFFFFF';
     ctx.fill();
     ctx.fillStyle = '#111827';
-    ctx.font = 'bold 22px Calibri, Arial, sans-serif';
+    ctx.font = 'bold 21px Calibri, Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(grandTotal.toLocaleString(), centerX, centerY + 2);
     ctx.font = '12px Calibri, Arial, sans-serif';
     ctx.fillStyle = '#6B7280';
-    ctx.fillText('total', centerX, centerY + 20);
+    ctx.fillText('total', centerX, centerY + 19);
     ctx.textAlign = 'left';
 
     const legendX = 420;
-    const legendY = 76;
-    const rowHeight = 26;
+    const legendY = 70;
+    const rowHeight = 24;
     const colWidth = 230;
     const maxRowsPerColumn = Math.ceil(chartRows.length / 2);
     ctx.font = '12px Calibri, Arial, sans-serif';
@@ -1106,7 +1118,7 @@
       const rowIndex = index % maxRowsPerColumn;
       const x = legendX + col * colWidth;
       const y = legendY + rowIndex * rowHeight;
-      const pct = grandTotal ? row.total / grandTotal : 0;
+      const pct = grandTotal ? row.value / grandTotal : 0;
 
       ctx.fillStyle = palette[index % palette.length];
       ctx.fillRect(x, y - 10, 12, 12);
@@ -1115,7 +1127,7 @@
       ctx.fillText(trimLegendLabel(row.type, 22), x + 18, y);
       ctx.fillStyle = '#6B7280';
       ctx.font = '11px Calibri, Arial, sans-serif';
-      ctx.fillText(`${row.total.toLocaleString()} · ${(pct * 100).toFixed(1)}%`, x + 18, y + 15);
+      ctx.fillText(`${row.value.toLocaleString()} · ${(pct * 100).toFixed(1)}%`, x + 18, y + 14);
     });
 
     return canvas.toDataURL('image/png');

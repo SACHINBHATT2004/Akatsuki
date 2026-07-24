@@ -34,3 +34,11 @@ A counsellor can therefore receive Registration/Admission counts even when anoth
 - XLSX, XLSM, XLTX and XLTM remain supported.
 - File picker, drag-and-drop validation and UI text were updated.
 - Existing report counting, mapping, Type Summary chart and downloaded workbook format are unchanged.
+
+Latest Type Summary update:
+- Replaced the combined Total pie chart with three separate charts:
+  1. Enquiry by Broad Type
+  2. Registration by Broad Type
+  3. Admission by Broad Type
+- Removed frozen rows/panes from Type Summary so the entire sheet can scroll normally.
+- Existing report counting logic and all other modules remain unchanged.
