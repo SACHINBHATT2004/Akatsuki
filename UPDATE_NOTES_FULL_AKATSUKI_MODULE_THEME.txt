@@ -1,0 +1,22 @@
+FULL AKATSUKI MODULE THEME UPDATE
+
+Updated UI only for:
+- Publisher Report Builder
+- CGS & Data Loader
+- Centerly
+- Smart Excel Toolkit
+- GEU Scholarship Calculator
+
+Crowd Coupon Generator was intentionally left unchanged.
+
+What changed:
+- Akatsuki red/black visual theme inside modules
+- Akatsuki cloud module badge
+- Akatsuki activation overlay on action/button clicks
+- Red glow, themed panels, inputs and primary buttons
+- Existing workflows, calculations, uploads and export logic preserved
+
+Verified:
+- Publisher core tests passed
+- File parser tests passed
+- Coupon Generator files remained identical
