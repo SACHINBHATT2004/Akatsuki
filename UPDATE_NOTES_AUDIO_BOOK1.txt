@@ -1,0 +1,14 @@
+UPDATE SUMMARY
+
+1. AKATSUKI logo audio
+- Click the AKATSUKI logo to play the supplied audio at low volume.
+- Click again to stop and reset it.
+- Click again to restart from the beginning.
+
+2. CGS & Data Loader default data
+- Book1.xlsx is bundled as the default Data Lookup dataset.
+- Users can still upload another Excel/CSV file.
+- Browser uploads remain stored only in that browser through localStorage.
+
+IMPORTANT
+GitHub Pages is static hosting. A file uploaded by one visitor cannot automatically become visible to every visitor without a shared backend/database such as Firebase, Supabase, or a Node.js API.

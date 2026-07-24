@@ -176,3 +176,8 @@ html[data-theme="light"] .module-icon-wrap img,
 html[data-theme="light"] .viewer-logo img{
   filter:drop-shadow(0 3px 7px rgba(66,8,14,.18));
 }
+
+.audio-brand{cursor:pointer;user-select:none}
+.audio-brand.audio-playing{border-color:rgba(255,49,56,.72);box-shadow:0 0 0 1px rgba(255,49,56,.18),0 0 24px rgba(255,49,56,.24)}
+.audio-brand.audio-playing .brand-logo,.audio-brand.audio-playing .mini-brand-logo{animation:akatsukiAudioPulse 1.6s ease-in-out infinite}
+@keyframes akatsukiAudioPulse{50%{transform:scale(1.035);filter:drop-shadow(0 0 10px rgba(255,49,56,.28))}}

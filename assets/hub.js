@@ -45,6 +45,36 @@
     }
   });
 
+
+  const akatsukiTrack = new Audio('./assets/akatsuki-theme-audio.mpeg');
+  akatsukiTrack.preload = 'auto';
+  akatsukiTrack.volume = 0.22;
+
+  function syncAkatsukiAudioState(playing){
+    document.querySelectorAll('[data-akatsuki-audio-toggle]').forEach(function(element){
+      element.classList.toggle('audio-playing', playing);
+      element.setAttribute('aria-pressed', playing ? 'true' : 'false');
+      element.title = playing ? 'Stop AKATSUKI audio' : 'Play AKATSUKI audio';
+    });
+  }
+
+  function toggleAkatsukiAudio(event){
+    event.preventDefault();
+    event.stopPropagation();
+    if (!akatsukiTrack.paused){
+      akatsukiTrack.pause();
+      akatsukiTrack.currentTime = 0;
+      syncAkatsukiAudioState(false);
+      return;
+    }
+    akatsukiTrack.currentTime = 0;
+    akatsukiTrack.play().then(function(){
+      syncAkatsukiAudioState(true);
+    }).catch(function(){
+      syncAkatsukiAudioState(false);
+    });
+  }
+
   function setTheme(theme){
     const safeTheme = theme === 'light' ? 'light' : 'dark';
     root.setAttribute('data-theme', safeTheme);
@@ -105,12 +135,21 @@
       if (next === 'on') play('click');
     });
 
+    document.querySelectorAll('[data-akatsuki-audio-toggle]').forEach(function(element){
+      element.addEventListener('click',toggleAkatsukiAudio);
+    });
+
+    akatsukiTrack.addEventListener('ended',function(){
+      akatsukiTrack.currentTime = 0;
+      syncAkatsukiAudioState(false);
+    });
+
     document.querySelectorAll('[data-sound="hover"]').forEach(function(element){
       element.addEventListener('mouseenter',function(){ play('hover'); });
       element.addEventListener('click',function(){ play('open'); });
     });
 
-    document.querySelectorAll('button,a:not([data-sound="hover"])').forEach(function(element){
+    document.querySelectorAll('button,a:not([data-sound="hover"]):not([data-akatsuki-audio-toggle])').forEach(function(element){
       element.addEventListener('click',function(){ play('click'); });
     });
   }
