@@ -48,7 +48,7 @@
 
   const akatsukiTrack = new Audio('./assets/akatsuki-theme-audio.mpeg');
   akatsukiTrack.preload = 'auto';
-  akatsukiTrack.volume = 0.22;
+  akatsukiTrack.volume = 0.02;
 
   function syncAkatsukiAudioState(playing){
     document.querySelectorAll('[data-akatsuki-audio-toggle]').forEach(function(element){
