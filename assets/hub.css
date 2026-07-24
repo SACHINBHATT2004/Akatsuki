@@ -181,3 +181,25 @@ html[data-theme="light"] .viewer-logo img{
 .audio-brand.audio-playing{border-color:rgba(255,49,56,.72);box-shadow:0 0 0 1px rgba(255,49,56,.18),0 0 24px rgba(255,49,56,.24)}
 .audio-brand.audio-playing .brand-logo,.audio-brand.audio-playing .mini-brand-logo{animation:akatsukiAudioPulse 1.6s ease-in-out infinite}
 @keyframes akatsukiAudioPulse{50%{transform:scale(1.035);filter:drop-shadow(0 0 10px rgba(255,49,56,.28))}}
+
+.akatsuki-audio-modal[hidden]{display:none}
+.akatsuki-audio-modal{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:20px}
+.akatsuki-audio-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.76);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.akatsuki-audio-dialog{position:relative;z-index:1;width:min(430px,100%);padding:28px;border-radius:26px;background:linear-gradient(145deg,rgba(18,10,12,.98),rgba(7,7,8,.98));border:1px solid var(--line-red);box-shadow:0 28px 90px rgba(0,0,0,.66),0 0 45px rgba(255,42,50,.12);text-align:center}
+html[data-theme="light"] .akatsuki-audio-dialog{background:linear-gradient(145deg,#fff,#fff3f4)}
+.akatsuki-modal-close{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);font-size:25px;line-height:1;cursor:pointer}
+.akatsuki-modal-close:hover{border-color:var(--line-red);background:rgba(255,42,50,.1)}
+.akatsuki-modal-logo{width:92px;height:66px;margin:0 auto 14px;padding:10px;border-radius:20px;background:rgba(255,42,50,.08);border:1px solid var(--line-red);display:grid;place-items:center}
+.akatsuki-modal-logo img{max-width:74px;max-height:44px;filter:drop-shadow(0 0 12px rgba(255,255,255,.16))}
+.akatsuki-audio-dialog h2{margin:6px 0 8px;font-size:1.55rem}
+.akatsuki-audio-dialog p{margin:0 0 18px;color:var(--muted);line-height:1.5}
+.akatsuki-audio-dialog p strong{color:var(--red);letter-spacing:.08em}
+#akatsukiAudioForm{display:grid;grid-template-columns:1fr auto;gap:10px}
+#akatsukiSecretInput{min-width:0;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.045);color:var(--text);outline:none;text-transform:uppercase;letter-spacing:.08em}
+#akatsukiSecretInput:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,42,50,.12)}
+#akatsukiAudioForm button{border:0;border-radius:14px;padding:13px 15px;background:linear-gradient(135deg,var(--red),var(--red-2));color:white;font-weight:800;cursor:pointer}
+.akatsuki-modal-message{min-height:20px;margin-top:12px;font-size:.88rem;color:var(--muted)}
+.akatsuki-modal-message.error{color:#ff8d92}
+.akatsuki-modal-message.success{color:#ffd0d3}
+body.akatsuki-modal-open{overflow:hidden}
+@media(max-width:520px){#akatsukiAudioForm{grid-template-columns:1fr}.akatsuki-audio-dialog{padding:24px 18px}}

@@ -54,6 +54,23 @@
     </section>
   </main>
 
+
+  <div class="akatsuki-audio-modal" id="akatsukiAudioModal" hidden>
+    <div class="akatsuki-audio-backdrop" data-close-akatsuki-modal></div>
+    <section class="akatsuki-audio-dialog" role="dialog" aria-modal="true" aria-labelledby="akatsukiAudioTitle">
+      <button class="akatsuki-modal-close" type="button" data-close-akatsuki-modal aria-label="Close">×</button>
+      <div class="akatsuki-modal-logo"><img src="./assets/akatsuki-logo.png" alt=""></div>
+      <div class="eyebrow accent-red">Hidden audio control</div>
+      <h2 id="akatsukiAudioTitle">Enter the secret word</h2>
+      <p>Type <strong>AKATSUKI</strong> to play or stop the theme audio.</p>
+      <form id="akatsukiAudioForm" autocomplete="off">
+        <input id="akatsukiSecretInput" type="text" placeholder="Type AKATSUKI" aria-label="Secret word" spellcheck="false">
+        <button type="submit">Unlock Audio</button>
+      </form>
+      <div class="akatsuki-modal-message" id="akatsukiModalMessage" aria-live="polite"></div>
+    </section>
+  </div>
+
   <script src="./assets/hub.js"></script>
 </body>
 </html>

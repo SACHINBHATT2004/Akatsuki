@@ -58,20 +58,73 @@
     });
   }
 
-  function toggleAkatsukiAudio(event){
+  function openAkatsukiAudioModal(event){
     event.preventDefault();
     event.stopPropagation();
+    const modal = document.getElementById('akatsukiAudioModal');
+    const input = document.getElementById('akatsukiSecretInput');
+    const message = document.getElementById('akatsukiModalMessage');
+    if (!modal) return;
+    modal.hidden = false;
+    body.classList.add('akatsuki-modal-open');
+    if (input){
+      input.value = '';
+      window.setTimeout(function(){ input.focus(); },50);
+    }
+    if (message){
+      message.textContent = akatsukiTrack.paused ? '' : 'Audio is currently playing. Enter AKATSUKI to stop it.';
+      message.className = 'akatsuki-modal-message';
+    }
+  }
+
+  function closeAkatsukiAudioModal(){
+    const modal = document.getElementById('akatsukiAudioModal');
+    if (!modal) return;
+    modal.hidden = true;
+    body.classList.remove('akatsuki-modal-open');
+  }
+
+  function submitAkatsukiSecret(event){
+    event.preventDefault();
+    const input = document.getElementById('akatsukiSecretInput');
+    const message = document.getElementById('akatsukiModalMessage');
+    const value = (input?.value || '').trim().toLowerCase();
+
+    if (value !== 'akatsuki'){
+      if (message){
+        message.textContent = 'Incorrect word. Type AKATSUKI.';
+        message.className = 'akatsuki-modal-message error';
+      }
+      input?.focus();
+      return;
+    }
+
     if (!akatsukiTrack.paused){
       akatsukiTrack.pause();
       akatsukiTrack.currentTime = 0;
       syncAkatsukiAudioState(false);
+      if (message){
+        message.textContent = 'Audio stopped.';
+        message.className = 'akatsuki-modal-message success';
+      }
+      window.setTimeout(closeAkatsukiAudioModal,450);
       return;
     }
+
     akatsukiTrack.currentTime = 0;
     akatsukiTrack.play().then(function(){
       syncAkatsukiAudioState(true);
+      if (message){
+        message.textContent = 'Audio started at very low volume.';
+        message.className = 'akatsuki-modal-message success';
+      }
+      window.setTimeout(closeAkatsukiAudioModal,450);
     }).catch(function(){
       syncAkatsukiAudioState(false);
+      if (message){
+        message.textContent = 'Browser blocked the audio. Please try again.';
+        message.className = 'akatsuki-modal-message error';
+      }
     });
   }
 
@@ -136,7 +189,15 @@
     });
 
     document.querySelectorAll('[data-akatsuki-audio-toggle]').forEach(function(element){
-      element.addEventListener('click',toggleAkatsukiAudio);
+      element.addEventListener('click',openAkatsukiAudioModal);
+    });
+
+    document.getElementById('akatsukiAudioForm')?.addEventListener('submit',submitAkatsukiSecret);
+    document.querySelectorAll('[data-close-akatsuki-modal]').forEach(function(element){
+      element.addEventListener('click',closeAkatsukiAudioModal);
+    });
+    document.addEventListener('keydown',function(event){
+      if (event.key === 'Escape') closeAkatsukiAudioModal();
     });
 
     akatsukiTrack.addEventListener('ended',function(){
