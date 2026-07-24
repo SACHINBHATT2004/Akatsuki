@@ -203,3 +203,27 @@ html[data-theme="light"] .akatsuki-audio-dialog{background:linear-gradient(145de
 .akatsuki-modal-message.success{color:#ffd0d3}
 body.akatsuki-modal-open{overflow:hidden}
 @media(max-width:520px){#akatsukiAudioForm{grid-template-columns:1fr}.akatsuki-audio-dialog{padding:24px 18px}}
+
+/* Mobile background alignment fix: keep the artwork centered on narrow screens
+   and avoid viewport shifts caused by browser address bars. */
+@media (max-width: 680px){
+  .akatsuki-backdrop{
+    inset:0;
+    width:100vw;
+    height:100svh;
+    min-height:100dvh;
+  }
+  .akatsuki-backdrop img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:50% 50%;
+    transform:scale(1.04);
+    transform-origin:center center;
+  }
+  .akatsuki-backdrop::after{
+    background:
+      linear-gradient(180deg,rgba(3,3,3,.50),rgba(5,2,3,.68)),
+      radial-gradient(circle at 50% 34%,rgba(180,8,18,.055),transparent 42%);
+  }
+}

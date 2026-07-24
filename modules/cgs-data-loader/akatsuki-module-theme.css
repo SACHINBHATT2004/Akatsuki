@@ -90,3 +90,12 @@ body{
 .drop-zone{background:radial-gradient(circle at 50% 0,rgba(255,74,84,.15),transparent 34%),linear-gradient(145deg,rgba(126,0,11,.15),rgba(255,47,58,.07))!important;border-color:rgba(255,58,68,.55)!important;color:#d9bcc0!important}
 .reset-button{color:#ff7887!important;background:rgba(255,47,74,.11)!important;border-color:rgba(255,74,98,.27)!important}
 .toast{background:rgba(14,8,10,.97)!important;border-color:rgba(255,63,73,.24)!important;color:#fff!important}
+
+/* Mobile background alignment */
+@media (max-width:680px){
+  html,body{
+    background-position:center center!important;
+    background-size:cover!important;
+    background-attachment:scroll!important;
+  }
+}

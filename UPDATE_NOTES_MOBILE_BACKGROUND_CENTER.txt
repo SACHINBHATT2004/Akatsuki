@@ -1,0 +1,6 @@
+MOBILE BACKGROUND CENTER UPDATE
+
+- AKATSUKI main artwork now stays centered on phones.
+- Uses stable small/dynamic viewport units to prevent shifting when mobile browser bars appear/disappear.
+- Module background images use centered positioning and scroll attachment on mobile.
+- No module processing, upload, download, counting or navigation logic was changed.

@@ -81,3 +81,12 @@ body{
 .metric-card strong{color:#fff!important}.metric-card span{color:#b98e94!important}
 .reference-badge{background:rgba(72,7,13,.26)!important;border-color:rgba(255,59,68,.22)!important}
 .status-dot{background:#ff3944!important;box-shadow:0 0 12px rgba(255,57,68,.72)!important}
+
+/* Mobile background alignment */
+@media (max-width:680px){
+  html,body{
+    background-position:center center!important;
+    background-size:cover!important;
+    background-attachment:scroll!important;
+  }
+}
