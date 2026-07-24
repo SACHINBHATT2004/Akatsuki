@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Excel Toolkit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"] {
+      --bg: #f0f4ff;
+      --surface: #ffffff;
+      --surface-2: #f7f9ff;
+      --border: #e2e8f7;
+      --text: #1a2340;
+      --text-soft: #4a5780;
+      --text-muted: #8896b3;
+      --shadow: 0 2px 16px rgba(60,80,160,0.08);
+      --shadow-hover: 0 8px 32px rgba(60,80,160,0.14);
+      --radius: 18px;
+      --font: 'Inter', sans-serif;
+      --purple: #7c6df0;
+      --green: #00c49a;
+      --orange: #fd7c35;
+      --red: #e84545;
+      --blue: #3b82f6;
+      --yellow: #f59e0b;
+      --focus: 0 0 0 3px rgba(124,109,240,0.15);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f1320;
+      --surface: #1a2035;
+      --surface-2: #151a2d;
+      --border: #252d45;
+      --text: #e8edf8;
+      --text-soft: #9aaac8;
+      --text-muted: #5a6a8a;
+      --shadow: 0 2px 16px rgba(0,0,0,0.32);
+      --shadow-hover: 0 8px 32px rgba(0,0,0,0.48);
+      --focus: 0 0 0 3px rgba(124,109,240,0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(124,109,240,0.12), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(0,196,154,0.10), transparent 22%),
+        var(--bg);
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body {
+      padding-bottom: 32px;
+    }
+
+    .topbar {
+      position: relative;
+      padding: 28px 24px 10px;
+      text-align: center;
+    }
+
+    .theme-btn {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    }
+
+    .theme-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .theme-btn:focus-visible { outline: none; box-shadow: var(--shadow-hover), var(--focus); }
+
+    .logo {
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .logo .g { color: var(--green); }
+    .logo .p { color: var(--purple); }
+
+    .tagline {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 24px 60px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--surface), var(--surface-2));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      transition: box-shadow 0.22s, transform 0.22s, border-color 0.22s;
+      min-height: 100%;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--border) 65%, var(--purple));
+    }
+
+    .card-border-green { border-top: 3px solid var(--green); }
+    .card-border-blue { border-top: 3px solid var(--blue); }
+    .card-border-orange { border-top: 3px solid var(--orange); }
+    .card-border-purple { border-top: 3px solid var(--purple); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+
+    .card-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .icon-green { background: rgba(0,196,154,0.14); }
+    .icon-blue { background: rgba(59,130,246,0.14); }
+    .icon-orange { background: rgba(253,124,53,0.14); }
+    .icon-purple { background: rgba(124,109,240,0.14); }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-sub {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+      line-height: 1.5;
+      margin-top: 2px;
+    }
+
+    .divider { height: 1px; background: var(--border); margin: 16px 0; }
+    .input-wrap { position: relative; width: 100%; }
+
+    input[type="text"], input[type="file"], select {
+      width: 100%;
+      height: 46px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      padding: 0 14px;
+      font-size: 14px;
+      font-family: var(--font);
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.3s;
+    }
+
+    input[type="text"]:focus, select:focus { border-color: var(--purple); box-shadow: var(--focus); }
+    input::placeholder { color: var(--text-muted); }
+    select option {
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    [data-theme="dark"] select option {
+      color: #e8edf8;
+      background: #1a2035;
+    }
+    input[type="file"] {
+      padding: 0 10px;
+      cursor: pointer;
+      overflow: hidden;
+      line-height: 46px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .column-pick-box {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      min-height: 120px;
+      max-height: 190px;
+      overflow-y: auto;
+      padding: 6px;
+    }
+
+    .column-pick-placeholder {
+      padding: 11px 12px;
+      color: var(--text-muted);
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .column-check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 9px;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: background 0.18s;
+    }
+
+    .column-check-item:hover {
+      background: color-mix(in srgb, var(--purple) 12%, transparent);
+    }
+
+    .column-check-item input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--orange);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .merge-helper-note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .vlookup-file-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .vlookup-file-input {
+      width: 100%;
+      min-width: 0;
+      height: 50px;
+      padding: 0 12px;
+      line-height: 48px;
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--surface) 88%, var(--orange)), var(--bg));
+      border-color: color-mix(in srgb, var(--orange) 36%, var(--border));
+    }
+
+    .vlookup-file-input::file-selector-button {
+      min-width: 116px;
+      height: 32px;
+      margin-right: 10px;
+      background: var(--purple);
+      color: #fff;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .vlookup-select-label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .vlookup-select {
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--surface) 86%, var(--orange)), var(--bg));
+      border-color: color-mix(in srgb, var(--orange) 36%, var(--border));
+    }
+
+    .vlookup-select:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(253,124,53,0.16);
+    }
+
+    .vlookup-sheet-wrap {
+      min-width: 0;
+      margin-top: 10px;
+    }
+
+    .vlookup-select option {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+
+    .module-sheet-wrap {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid color-mix(in srgb, var(--blue) 24%, var(--border));
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--surface-2) 88%, var(--blue));
+    }
+
+    .module-sheet-wrap select {
+      margin-top: 6px;
+      background: var(--bg);
+    }
+
+    .module-sheet-label {
+      display: block;
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .group-file-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 260px);
+      gap: 10px;
+      align-items: center;
+      margin-top: 8px;
+      padding: 9px 10px;
+      border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+    }
+
+    .merge-source-sheet-select {
+      height: 38px;
+      font-size: 12.5px;
+      padding: 0 10px;
+      border-color: color-mix(in srgb, var(--blue) 28%, var(--border));
+      background: var(--bg);
+    }
+
+    .sheet-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 5px;
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .vlookup-pair {
+      align-items: start;
+    }
+
+    .vlookup-side {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .vlookup-side .merge-helper-note {
+      min-height: 38px;
+      margin-top: 0;
+    }
+
+
+
+    input::file-selector-button {
+      border: none;
+      border-radius: 7px;
+      padding: 6px 12px;
+      margin-right: 8px;
+      cursor: pointer;
+      background: var(--border);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 12px;
+      font-family: var(--font);
+      height: 30px;
+      line-height: 18px;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+
+    .spacer { height: 10px; }
+    .section-gap { margin-top: 14px; }
+
+    .actions, .summary-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.18s, opacity 0.18s, box-shadow 0.18s;
+      font-family: var(--font);
+      white-space: nowrap;
+    }
+
+    button:hover { transform: translateY(-1px); opacity: 0.94; }
+    button:active { transform: translateY(0); }
+    button:focus-visible { outline: none; box-shadow: var(--focus); }
+
+    .btn-purple { background: var(--purple); }
+    .btn-green { background: var(--green); }
+    .btn-red { background: var(--red); }
+    .btn-blue { background: var(--blue); }
+    .btn-orange { background: var(--orange); }
+    .btn-gray { background: var(--text-muted); }
+    .btn-yellow { background: var(--yellow); }
+
+    .result-box {
+      display: none;
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .sheetItem, .filterItem, .groupBox, .downloadItem {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sheetItem:last-child, .filterItem:last-child, .groupBox:last-child, .downloadItem:last-child { border-bottom: none; }
+
+    .sheetItem, .filterItem, .downloadItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      gap: 10px;
+    }
+
+    .sheet-name, .group-title, .download-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .sheet-count, .group-file, .download-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      word-break: break-word;
+    }
+
+    .groupBox { padding: 10px 14px; }
+
+    .filterLeft {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .filterLeft input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .countBadge {
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: var(--border);
+      color: var(--text-soft);
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .summary-controls, .merger-download, .finder-download-wrap { display: none; margin-top: 14px; }
+    .finder-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .filter-top { display: grid; gap: 10px; }
+
+
+    .breaker-result-tools {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .breaker-result-tools .filter-top {
+      display: grid;
+      gap: 10px;
+    }
+
+    .breaker-result-tools input[type="text"] {
+      background: var(--bg);
+      border-color: var(--border);
+    }
+
+    .breaker-result-tools input[type="text"]:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0,196,154,0.16);
+    }
+
+    .breaker-result-tools .summary-row {
+      margin-top: 0;
+    }
+
+    .breaker-row-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .breaker-row-left input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .breaker-row-copy {
+      min-width: 0;
+    }
+
+    .breaker-row-copy .sheet-name {
+      overflow-wrap: anywhere;
+    }
+
+    .breaker-row-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .breaker-empty-result {
+      padding: 14px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .breaker-selection-panel {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1.5px solid color-mix(in srgb, var(--orange) 52%, var(--border));
+      background:
+        linear-gradient(180deg, rgba(253,124,53,0.16), rgba(253,124,53,0.07)),
+        var(--surface-2);
+      box-shadow: 0 10px 28px rgba(253,124,53,0.11);
+    }
+
+    .breaker-selection-panel input[type="text"] {
+      border-color: color-mix(in srgb, var(--orange) 34%, var(--border));
+      background: color-mix(in srgb, var(--surface) 88%, var(--orange));
+    }
+
+    .breaker-selection-panel input[type="text"]:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(253,124,53,0.16);
+    }
+
+    .breaker-selection-panel .summary-row {
+      margin-top: 10px !important;
+    }
+
+    .breaker-selection-panel .result-box {
+      border-color: color-mix(in srgb, var(--orange) 38%, var(--border));
+      background: color-mix(in srgb, var(--bg) 82%, var(--orange));
+    }
+
+    .selected-summary-preview {
+      display: none;
+      margin-top: 12px;
+      border-radius: 12px;
+      border: 1.5px solid color-mix(in srgb, var(--green) 35%, var(--border));
+      background: var(--surface);
+      overflow: hidden;
+    }
+
+    .selected-summary-title {
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface-2) 80%, var(--green));
+    }
+
+    .selected-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .selected-summary-table th,
+    .selected-summary-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .selected-summary-table th {
+      font-weight: 800;
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .selected-summary-table td:last-child,
+    .selected-summary-table th:last-child {
+      text-align: center;
+      width: 140px;
+    }
+
+    .selected-summary-table tr:last-child td {
+      border-bottom: none;
+      font-weight: 800;
+      background: color-mix(in srgb, var(--surface-2) 78%, var(--blue));
+    }
+
+    .status-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text-soft);
+      font-size: 12.5px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .downloadLinks {
+      display: grid;
+      gap: 10px;
+    }
+
+    .downloadAction {
+      text-decoration: none;
+    }
+
+    .downloadAction button { width: 100%; justify-content: center; }
+
+    .sound-btn {
+      position: absolute;
+      top: 22px;
+      right: 76px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 17px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    }
+
+    .sound-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .sound-btn:focus-visible { outline: none; box-shadow: var(--shadow-hover), var(--focus); }
+
+    .experience-screen,
+    .module-launcher,
+    .page { display: none; }
+
+    body.prelaunch .start-screen,
+    body.booting .boot-screen { display: flex; }
+
+    body.launcher-active .module-launcher { display: block; }
+    body.workspace-active .page { display: block; }
+
+    .experience-screen {
+      min-height: calc(100vh - 120px);
+      align-items: center;
+      justify-content: center;
+      padding: 28px 24px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .experience-screen::before,
+    .module-launcher::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 36%, rgba(0,196,154,0.13), transparent 24%),
+        radial-gradient(circle at 72% 76%, rgba(124,109,240,0.11), transparent 26%),
+        radial-gradient(circle at 18% 82%, rgba(59,130,246,0.10), transparent 26%);
+      opacity: 0.95;
+    }
+
+    .start-inner,
+    .hud-stage,
+    .module-launcher {
+      position: relative;
+      z-index: 1;
+    }
+
+    .start-inner {
+      width: min(760px, 100%);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      gap: 22px;
+      animation: softReveal 0.85s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .power-orbit {
+      position: absolute;
+      width: 470px;
+      height: 470px;
+      border-radius: 50%;
+      border: 1px solid rgba(124,109,240,0.09);
+      box-shadow:
+        0 0 0 80px rgba(0,196,154,0.012),
+        0 0 70px rgba(0,196,154,0.10),
+        inset 0 0 70px rgba(59,130,246,0.05);
+      animation: orbitBreath 4.4s ease-in-out infinite;
+    }
+
+    .power-button {
+      width: clamp(190px, 22vw, 290px);
+      height: clamp(190px, 22vw, 290px);
+      border-radius: 50%;
+      padding: 0;
+      border: 9px solid rgba(255,255,255,0.78);
+      background:
+        radial-gradient(circle at 50% 72%, rgba(0,196,60,0.42), transparent 32%),
+        linear-gradient(145deg, #05080b, #11151d 45%, #010204);
+      color: #19ff2d;
+      font-size: clamp(92px, 13vw, 150px);
+      line-height: 1;
+      justify-content: center;
+      box-shadow:
+        0 0 0 14px rgba(255,255,255,0.08),
+        0 26px 80px rgba(0,0,0,0.52),
+        0 0 76px rgba(0,196,154,0.30),
+        inset 0 18px 28px rgba(255,255,255,0.12),
+        inset 0 -18px 42px rgba(0,0,0,0.72);
+      position: relative;
+      isolation: isolate;
+      transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+    }
+
+    .power-button::after {
+      content: '';
+      position: absolute;
+      inset: 12%;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent 36%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .power-button:hover {
+      transform: translateY(-4px) scale(1.025);
+      filter: saturate(1.14);
+      box-shadow:
+        0 0 0 14px rgba(255,255,255,0.08),
+        0 30px 92px rgba(0,0,0,0.55),
+        0 0 105px rgba(0,196,154,0.42),
+        inset 0 18px 28px rgba(255,255,255,0.14),
+        inset 0 -18px 42px rgba(0,0,0,0.72);
+    }
+
+    .power-button:active { transform: scale(0.985); }
+    .power-symbol { text-shadow: 0 0 22px rgba(0,255,44,0.8), 0 0 48px rgba(0,196,154,0.55); }
+
+    .start-title {
+      margin-top: 16px;
+      color: var(--text-soft);
+      font-weight: 800;
+      font-size: clamp(18px, 2.4vw, 26px);
+      letter-spacing: -0.2px;
+    }
+
+    .start-subtitle {
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .feature-strip {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--surface) 78%, transparent);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .feature-strip div {
+      min-width: 152px;
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      grid-template-rows: auto auto;
+      column-gap: 10px;
+      align-items: center;
+      padding: 13px 18px;
+      border-right: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .feature-strip div:last-child { border-right: none; }
+    .feature-strip span { grid-row: 1 / 3; font-size: 19px; }
+    .feature-strip strong { font-size: 13px; color: var(--text); }
+    .feature-strip small { color: var(--text-muted); font-weight: 600; font-size: 11px; }
+
+    .hud-stage {
+      width: min(1120px, 100%);
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      text-align: center;
+      animation: softReveal 0.7s ease both;
+    }
+
+    .hud-core {
+      width: clamp(260px, 34vw, 470px);
+      height: clamp(260px, 34vw, 470px);
+      border-radius: 50%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      margin-top: 20px;
+      margin-bottom: 34px;
+      filter: drop-shadow(0 0 32px rgba(0,216,255,0.24));
+      flex-shrink: 0;
+    }
+
+    .hud-ring,
+    .hud-ring::before,
+    .hud-ring::after {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      content: '';
+    }
+
+    .hud-ring-1 {
+      border: 2px solid rgba(0,216,255,0.36);
+      border-top-color: rgba(0,255,218,0.96);
+      border-right-color: rgba(124,109,240,0.78);
+      animation: hudSpin 1.9s linear infinite;
+    }
+
+    .hud-ring-2 {
+      inset: 10%;
+      border: 18px solid transparent;
+      border-top-color: rgba(0,216,255,0.46);
+      border-bottom-color: rgba(0,255,218,0.44);
+      animation: hudSpinReverse 2.8s linear infinite;
+    }
+
+    .hud-ring-3 {
+      inset: 22%;
+      border: 1.5px dashed rgba(0,255,218,0.45);
+      animation: hudSpin 5.2s linear infinite;
+    }
+
+    .hud-ring-4 {
+      inset: 34%;
+      border: 8px solid rgba(59,130,246,0.17);
+      border-left-color: rgba(0,255,218,0.76);
+      border-bottom-color: rgba(124,109,240,0.78);
+      animation: hudPulse 1.25s ease-in-out infinite;
+    }
+
+    .hud-pulse {
+      width: 124px;
+      height: 124px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #00ffdd;
+      font-size: 70px;
+      background: radial-gradient(circle, rgba(0,255,218,0.18), rgba(0,0,0,0.40) 66%);
+      box-shadow: 0 0 60px rgba(0,216,255,0.30), inset 0 0 28px rgba(0,255,218,0.22);
+      text-shadow: 0 0 22px rgba(0,255,218,0.8);
+      animation: centerPulse 1.2s ease-in-out infinite;
+    }
+
+    .hud-label {
+      position: absolute;
+      top: 42%;
+      color: #26d9ff;
+      font-weight: 800;
+      font-size: clamp(12px, 1.4vw, 16px);
+      letter-spacing: 0.04em;
+      text-align: left;
+      text-shadow: 0 0 16px rgba(0,216,255,0.55);
+    }
+
+    .hud-left { left: 8%; }
+    .hud-right { right: 8%; }
+    .hud-right span { color: #00ffdd; }
+
+    .boot-title {
+      margin-top: 0;
+      color: #00ffdd;
+      font-size: clamp(15px, 1.7vw, 21px);
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    .boot-subtitle {
+      margin-top: 10px;
+      color: var(--text-soft);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .boot-dots {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .boot-dots span {
+      width: 42px;
+      height: 5px;
+      border-radius: 99px;
+      background: rgba(59,130,246,0.22);
+      animation: dotLoad 1.4s ease-in-out infinite;
+    }
+
+    .boot-dots span:nth-child(2) { animation-delay: .12s; }
+    .boot-dots span:nth-child(3) { animation-delay: .24s; }
+    .boot-dots span:nth-child(4) { animation-delay: .36s; }
+    .boot-dots span:nth-child(5) { animation-delay: .48s; }
+
+    .module-launcher {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 22px 20px 46px;
+      animation: softReveal 0.65s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .launcher-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .launch-card {
+      width: 100%;
+      min-width: 0;
+      min-height: 244px;
+      display: grid;
+      grid-template-columns: 136px minmax(0, 1fr) 48px;
+      gap: 30px;
+      align-items: center;
+      text-align: left;
+      padding: 34px;
+      border: 1.5px solid var(--border);
+      white-space: normal;
+      background:
+        radial-gradient(circle at 18% 40%, rgba(255,255,255,0.06), transparent 34%),
+        linear-gradient(180deg, color-mix(in srgb, var(--surface) 92%, transparent), color-mix(in srgb, var(--surface-2) 92%, transparent));
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      color: var(--text);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .launch-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      background: radial-gradient(circle at 20% 48%, var(--launch-glow), transparent 42%);
+      pointer-events: none;
+    }
+
+    .launch-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover), 0 0 44px color-mix(in srgb, var(--launch-color) 18%, transparent);
+      border-color: color-mix(in srgb, var(--launch-color) 62%, var(--border));
+    }
+
+    .launch-card:hover::before { opacity: 1; }
+    .launch-green { --launch-color: var(--green); --launch-glow: rgba(0,196,154,0.18); }
+    .launch-purple { --launch-color: var(--purple); --launch-glow: rgba(124,109,240,0.18); }
+    .launch-blue { --launch-color: var(--blue); --launch-glow: rgba(59,130,246,0.18); }
+    .launch-orange { --launch-color: var(--orange); --launch-glow: rgba(253,124,53,0.18); }
+
+    .launch-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 50px;
+      background: color-mix(in srgb, var(--launch-color) 14%, transparent);
+      box-shadow: inset 0 0 22px color-mix(in srgb, var(--launch-color) 24%, transparent), 0 0 34px color-mix(in srgb, var(--launch-color) 14%, transparent);
+      position: relative;
+      z-index: 1;
+    }
+
+    .launch-copy,
+    .launch-arrow { position: relative; z-index: 1; }
+    .launch-copy { min-width: 0; overflow: hidden; }
+    .launch-copy strong {
+      display: block;
+      color: var(--text);
+      font-size: clamp(22px, 2.15vw, 30px);
+      line-height: 1.10;
+      font-weight: 900;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .launch-copy small {
+      display: -webkit-box;
+      margin-top: 12px;
+      color: var(--text-soft);
+      line-height: 1.62;
+      font-size: 15.5px;
+      font-weight: 600;
+      white-space: normal;
+      overflow: hidden;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+    .launch-arrow {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid color-mix(in srgb, var(--launch-color) 40%, var(--border));
+      color: var(--launch-color);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      font-weight: 900;
+      background: color-mix(in srgb, var(--launch-color) 9%, transparent);
+    }
+
+    .launcher-strip { margin: 34px auto 0; width: fit-content; max-width: 100%; transform: scale(1.06); transform-origin: top center; }
+
+    .workspace-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    body.workspace-active .grid.module-focus {
+      grid-template-columns: 1fr;
+    }
+
+    body.workspace-active .grid.module-focus .card[data-module] {
+      display: none;
+    }
+
+    body.workspace-active .grid.module-focus .card.active-tool-card {
+      display: block;
+      animation: moduleOpen 0.58s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    body.workspace-active .grid.module-focus .card.active-tool-card:hover {
+      transform: none;
+    }
+
+    @keyframes softReveal {
+      from { opacity: 0; transform: translateY(16px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes moduleOpen {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); filter: blur(5px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes orbitBreath {
+      0%,100% { transform: scale(0.98); opacity: 0.74; }
+      50% { transform: scale(1.04); opacity: 1; }
+    }
+
+    @keyframes hudSpin { to { transform: rotate(360deg); } }
+    @keyframes hudSpinReverse { to { transform: rotate(-360deg); } }
+    @keyframes hudPulse { 0%,100% { opacity: .65; transform: scale(.98); } 50% { opacity: 1; transform: scale(1.03); } }
+    @keyframes centerPulse { 0%,100% { transform: scale(.98); } 50% { transform: scale(1.04); } }
+    @keyframes dotLoad { 0%,100% { opacity: .25; transform: scaleX(.72); } 50% { opacity: 1; transform: scaleX(1); background: #00ffdd; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .power-orbit,
+      .hud-ring,
+      .hud-ring-1,
+      .hud-ring-2,
+      .hud-ring-3,
+      .hud-ring-4,
+      .hud-pulse,
+      .boot-dots span,
+      .start-inner,
+      .module-launcher,
+      .card.active-tool-card { animation: none !important; }
+    }
+
+
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+      .launcher-grid { grid-template-columns: 1fr; }
+      .launch-card { grid-template-columns: 98px 1fr 40px; min-height: 190px; padding: 24px; }
+      .launch-icon { width: 82px; height: 82px; font-size: 34px; }
+      .finder-grid { grid-template-columns: 1fr; }
+      .vlookup-file-row { grid-template-columns: 1fr; }
+      .page { padding: 20px 14px 50px; }
+    }
+
+    @media (max-width: 480px) {
+      button { width: 100%; justify-content: center; }
+      .actions, .summary-row { flex-direction: column; }
+      .sheetItem, .downloadItem { flex-direction: column; align-items: flex-start; }
+      .breaker-row-left, .breaker-row-actions { width: 100%; }
+      .breaker-row-actions button { width: 100%; }
+      .theme-btn { right: 14px; }
+      .sound-btn { right: 64px; }
+      .feature-strip { width: 100%; }
+      .feature-strip div { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+      .feature-strip div:last-child { border-bottom: none; }
+      .hud-label { display: none; }
+      .launch-card { grid-template-columns: 1fr; }
+      .group-file-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="prelaunch">
+  <div class="topbar">
+    <button class="sound-btn" onclick="toggleSound()" title="Toggle sound" aria-label="Toggle sound">🔊</button>
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme">☀️</button>
+    <div class="logo">Smart <span class="g">Excel</span> <span class="p">Toolkit</span></div>
+    <div class="tagline">Powerful Tools for Smarter Excel Operations</div>
+  </div>
+
+  <section id="startScreen" class="experience-screen start-screen" aria-label="Start Smart Excel Toolkit">
+    <div class="start-inner">
+      <div class="power-orbit" aria-hidden="true"></div>
+      <button type="button" class="power-button premium-sfx-open" onclick="startExperience()" aria-label="Power on Smart Excel Toolkit">
+        <span class="power-symbol">⏻</span>
+      </button>
+      <div class="start-copy">
+        <div class="start-title">One Click. Smarter Excel.</div>
+        <div class="start-subtitle">Start your journey to powerful and efficient Excel operations.</div>
+      </div>
+      <div class="feature-strip">
+        <div><span>⚡</span><strong>Fast</strong><small>Instant Processing</small></div>
+        <div><span>🧠</span><strong>Smart</strong><small>Intelligent Tools</small></div>
+        <div><span>🛡️</span><strong>Secure</strong><small>Your Data Safe</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="bootScreen" class="experience-screen boot-screen" aria-label="Activating Smart Excel Toolkit">
+    <div class="hud-stage">
+      <div class="hud-label hud-left">INITIALIZING<br>SYSTEM...</div>
+      <div class="hud-core">
+        <span class="hud-ring hud-ring-1"></span>
+        <span class="hud-ring hud-ring-2"></span>
+        <span class="hud-ring hud-ring-3"></span>
+        <span class="hud-ring hud-ring-4"></span>
+        <span class="hud-pulse">⏻</span>
+      </div>
+      <div class="hud-label hud-right">LOADING MODULES<br><span>78%</span></div>
+      <div class="boot-title">ACTIVATING SMART EXCEL TOOLKIT</div>
+      <div class="boot-subtitle">Preparing intelligent tools and secure workspace...</div>
+      <div class="boot-dots"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </section>
+
+  <section id="moduleLauncher" class="module-launcher" aria-label="Choose a tool">
+    <div class="launcher-grid">
+      <button type="button" class="launch-card launch-green" onclick="openModule('breaker')">
+        <span class="launch-icon">✂️</span>
+        <span class="launch-copy"><strong>Excel Breaker</strong><small>Break Excel files into multiple smaller files based on column values.</small></span>
+        <span class="launch-arrow">→</span>
+      </button>
+      <button type="button" class="launch-card launch-purple" onclick="openModule('finder')">
+        <span class="launch-icon">🔍</span>
+        <span class="launch-copy"><strong>Common Detail Remover & Finder</strong><small>Find and remove common rows, then download common and remaining data.</small></span>
+        <span class="launch-arrow">→</span>
+      </button>
+      <button type="button" class="launch-card launch-blue" onclick="openModule('merger')">
+        <span class="launch-icon">📚</span>
+        <span class="launch-copy"><strong>Excel Merger</strong><small>Merge multiple Excel files into one single file seamlessly.</small></span>
+        <span class="launch-arrow">→</span>
+      </button>
+      <button type="button" class="launch-card launch-orange" onclick="openModule('vlookup')">
+        <span class="launch-icon">📊</span>
+        <span class="launch-copy"><strong>Excel Advanced VLOOKUP</strong><small>Match Excel A and B, then add selected columns into Excel B.</small></span>
+        <span class="launch-arrow">→</span>
+      </button>
+    </div>
+    <div class="feature-strip launcher-strip">
+      <div><span>⚡</span><strong>Fast</strong><small>Instant Processing</small></div>
+      <div><span>🧠</span><strong>Smart</strong><small>Intelligent Tools</small></div>
+      <div><span>🛡️</span><strong>Secure</strong><small>Your Data Safe</small></div>
+    </div>
+  </section>
+
+
+  <div class="page">
+    <div class="workspace-top-actions">
+      <button type="button" class="btn-gray" onclick="showLauncher()">← Back to Modules</button>
+      <span>The selected module is now active. Click "Back to Modules" to return to the dashboard.</span>
+    </div>
+    <div class="grid" id="toolGrid">
+      <div class="card card-border-green" data-module="breaker">
+        <div class="card-header">
+          <div class="card-icon icon-green">✂️</div>
+          <div>
+            <div class="card-title">Excel Breaker</div>
+            <div class="card-sub">Break Excel files into multiple files based on column values.</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <input type="file" id="excelFile" />
+        <div id="breakerSheetWrap" class="module-sheet-wrap">
+          <label class="module-sheet-label" for="breakerSheet">Worksheet</label>
+          <select id="breakerSheet"><option value="">Select Sheet</option></select>
+        </div>
+        <div class="spacer"></div>
+        <select id="columnName"><option value="">Select Column Name</option></select>
+        <div class="actions">
+          <button class="btn-green" onclick="uploadExcel()">⚡ Break</button>
+          <button class="btn-red" onclick="clearExcel()">🗑 Clear</button>
+        </div>
+
+        <!-- New controls for the main broken-data list -->
+        <div id="breakerResultTools" class="breaker-result-tools">
+          <div class="filter-top">
+            <input type="text" id="breakerDataSearch" placeholder="Search broken data by name or type multiple names separated by commas" oninput="renderBreakerDataList()" />
+            <div class="summary-row">
+              <button class="btn-gray" onclick="selectAllVisibleBreakerData()">✅ Select Visible</button>
+              <button class="btn-red" onclick="clearSelectedBreakerGroups()">✖ Clear Selected</button>
+              <button class="btn-orange" onclick="downloadSelectedBreakerData()">📦 Download Selected Data</button>
+              <button class="btn-blue" onclick="downloadAllBreakerData()">📦 Download All Data</button>
+            </div>
+            <div id="breakerSelectionStatus" class="status-note" style="display:block; margin-top:0;">0 groups selected</div>
+          </div>
+        </div>
+
+        <!-- Original broken-data list with individual download buttons -->
+        <div id="excelResult" class="result-box"></div>
+
+        <div id="summaryControls" class="summary-controls">
+          <div class="summary-row">
+            <button class="btn-blue" onclick="downloadSummaryDefault()">📥 Download Summary</button>
+            <button class="btn-green" onclick="toggleCustomSummaryBox()">✏️ Custom Name</button>
+          </div>
+          <div id="customSummaryBox" style="display:none; margin-top:10px;">
+            <input type="text" id="customSummaryName" placeholder="Enter custom file name" />
+            <div class="spacer"></div>
+            <button class="btn-gray" onclick="downloadSummaryCustom()">📁 Download Custom File</button>
+          </div>
+        </div>
+
+        <!-- Original orange selected-summary module restored exactly in its own section -->
+        <div id="breakerFilterBox" class="breaker-selection-panel" style="display:none;">
+          <div class="filter-top">
+            <input type="text" id="breakerSearch" placeholder="Type names separated by commas e.g. Agra, Kota, Jaipur" oninput="renderBreakerSelectionList()" />
+            <div class="summary-row" style="margin-top:8px;">
+              <button class="btn-gray" onclick="selectAllVisibleBreakerGroups()">✅ Select Visible</button>
+              <button class="btn-red" onclick="clearSelectedBreakerGroups()">✖ Clear Selected</button>
+              <button class="btn-green" onclick="downloadSelectedBreakerSummary()">📥 Download Selected Summary</button>
+            </div>
+          </div>
+          <div id="breakerSelectionList" class="result-box" style="display:block; margin-top:10px;"></div>
+          <div id="selectedBreakerSummaryPreview" class="selected-summary-preview"></div>
+        </div>
+      </div>
+
+      <div class="card card-border-purple" data-module="finder">
+        <div class="card-header">
+          <div class="card-icon icon-purple">🔍</div>
+          <div>
+            <div class="card-title">Common Detail Remover & Finder</div>
+            <div class="card-sub">Find common rows on selected columns and download 3 files: common data, primary remaining, secondary remaining.</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="finder-grid">
+          <div>
+            <input type="file" id="finderPrimaryFile" />
+            <div id="finderPrimarySheetWrap" class="module-sheet-wrap">
+              <label class="module-sheet-label" for="finderPrimarySheet">Primary Worksheet</label>
+              <select id="finderPrimarySheet"><option value="">Select Sheet</option></select>
+            </div>
+            <div class="spacer"></div>
+            <select id="finderPrimaryColumn"><option value="">Select Primary Column</option></select>
+          </div>
+          <div>
+            <input type="file" id="finderSecondaryFile" />
+            <div id="finderSecondarySheetWrap" class="module-sheet-wrap">
+              <label class="module-sheet-label" for="finderSecondarySheet">Secondary Worksheet</label>
+              <select id="finderSecondarySheet"><option value="">Select Sheet</option></select>
+            </div>
+            <div class="spacer"></div>
+            <select id="finderSecondaryColumn"><option value="">Select Secondary Column</option></select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-purple" onclick="processCommonFinder()">🚀 Start</button>
+          <button class="btn-red" onclick="clearCommonFinder()">🗑 Clear</button>
+        </div>
+        <div id="finderStatus" class="status-note"></div>
+        <div id="finderDownloadWrap" class="finder-download-wrap">
+          <div class="downloadLinks">
+            <div class="downloadItem">
+              <div>
+                <div class="download-title">Common Data File</div>
+                <div class="download-sub">Rows matched on selected columns.</div>
+              </div>
+            </div>
+            <div class="summary-row" style="margin-top:8px; gap:8px;">
+              <input type="text" id="commonFileName" placeholder="Enter common file name" style="flex:1;" />
+              <button class="btn-green" onclick="downloadCommonFile()" style="padding:10px 16px;">📥 Download</button>
+            </div>
+            <div class="downloadItem">
+              <div>
+                <div class="download-title">Primary Remaining File</div>
+                <div class="download-sub">Primary sheet after removing Common rows.</div>
+              </div>
+            </div>
+            <div class="summary-row" style="margin-top:8px; gap:8px;">
+              <input type="text" id="primaryRemainingFileName" placeholder="Enter primary remaining file name" style="flex:1;" />
+              <button class="btn-green" onclick="downloadPrimaryFile()" style="padding:10px 16px;">📥 Download</button>
+            </div>
+            <div class="downloadItem">
+              <div>
+                <div class="download-title">Secondary Remaining File</div>
+                <div class="download-sub">Secondary sheet after removing Common rows.</div>
+              </div>
+            </div>
+            <div class="summary-row" style="margin-top:8px; gap:8px;">
+              <input type="text" id="secondaryRemainingFileName" placeholder="Enter secondary remaining file name" style="flex:1;" />
+              <button class="btn-green" onclick="downloadSecondaryFile()" style="padding:10px 16px;">📥 Download</button>
+            </div>
+            <div class="summary-row" style="margin-top:12px;">
+              <button class="btn-blue" onclick="downloadCommonFinderFiles()">📦 Download All 3 Files</button>
+              <button class="btn-gray" onclick="resetCommonFinderPrompt()">✖ Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-border-blue" data-module="merger">
+        <div class="card-header">
+          <div class="card-icon icon-blue">📚</div>
+          <div>
+            <div class="card-title">Excel Merger</div>
+            <div class="card-sub">Merge multiple Excel files into one single file.</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <input type="file" id="mergeFiles" multiple style="display:none;" onchange="addGroup(event)" />
+        <div class="actions">
+          <button class="btn-yellow" onclick="document.getElementById('mergeFiles').click()">📂 Choose Files</button>
+          <button class="btn-green" onclick="mergeExcels()">🔗 Merge Excel</button>
+          <button class="btn-red" onclick="clearAll()">🗑 Clear</button>
+        </div>
+        <div class="merger-download" id="mergerDownloadWrap">
+          <a id="downloadZip"><button type="button" class="btn-blue">📦 Download ZIP</button></a>
+        </div>
+        <div id="groupList" class="result-box" style="margin-top:14px;"></div>
+      </div>
+
+      <div class="card card-border-orange" data-module="vlookup">
+        <div class="card-header">
+          <div class="card-icon icon-orange">🔄</div>
+          <div>
+            <div class="card-title">Excel Advanced VLOOKUP</div>
+            <div class="card-sub">Perform Advanced VLOOKUP between Excel A and Excel B using common columns, then add selected Excel A columns into Excel B.</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="finder-grid vlookup-pair">
+          <div class="vlookup-side">
+            <div class="vlookup-file-row">
+              <input type="file" id="updaterSourceFile" class="vlookup-file-input" />
+              <div id="updaterSourceSheetWrap" class="vlookup-sheet-wrap" style="display:none;">
+                <label class="vlookup-select-label" for="updaterSourceSheet">Excel A Sheet</label>
+                <select id="updaterSourceSheet" class="vlookup-select"><option value="">Select Sheet</option></select>
+              </div>
+            </div>
+            <div class="merge-helper-note">Excel A / Source file: Select the file that contains the master data. If multiple sheets are found, the sheet selector will appear automatically.</div>
+            <div class="spacer"></div>
+            <select id="updaterSourceMatchColumn" class="vlookup-select"><option value="">Select Matching Column in Excel A</option></select>
+          </div>
+          <div class="vlookup-side">
+            <div class="vlookup-file-row">
+              <input type="file" id="updaterTargetFile" class="vlookup-file-input" />
+              <div id="updaterTargetSheetWrap" class="vlookup-sheet-wrap" style="display:none;">
+                <label class="vlookup-select-label" for="updaterTargetSheet">Excel B Sheet</label>
+                <select id="updaterTargetSheet" class="vlookup-select"><option value="">Select Sheet</option></select>
+              </div>
+            </div>
+            <div class="merge-helper-note">Excel B / Destination file: Select the file that will be updated. If multiple sheets are found, the sheet selector will appear automatically.</div>
+            <div class="spacer"></div>
+            <select id="updaterTargetMatchColumn" class="vlookup-select"><option value="">Select Matching Column in Excel B</option></select>
+          </div>
+        </div>
+        <div class="section-gap">
+          <div id="updaterColumnsToAdd" class="column-pick-box">
+            <div class="column-pick-placeholder">Select columns from Excel A to add into Excel B</div>
+          </div>
+          <div class="merge-helper-note">Select one or more columns to import into the destination Excel file.</div>
+        </div>
+        <div class="actions">
+          <button class="btn-orange" onclick="processExcelDataUpdater()">⚙️ Run VLOOKUP</button>
+          <button class="btn-red" onclick="clearExcelDataUpdater()">🗑 Clear</button>
+        </div>
+        <div id="updaterStatus" class="status-note"></div>
+        <div id="updaterDownloadWrap" class="finder-download-wrap">
+          <div class="summary-row" style="gap:8px;">
+            <input type="text" id="updaterOutputFileName" placeholder="Enter output file name" style="flex:1;" />
+            <button class="btn-green" onclick="downloadUpdatedExcelB()">📥 Download Updated Excel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return null;
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function tinyTone(freq, duration, volume, type = 'sine', delay = 0, endFreq = null) {
+      if (!soundEnabled || !audioCtx) return;
+      const now = audioCtx.currentTime + delay;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      if (endFreq) osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(volume, now + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + duration + 0.03);
+    }
+
+    function playSfx(type = 'click') {
+      if (!soundEnabled || !audioCtx) return;
+      const profile = {
+        hover: () => tinyTone(980, 0.035, 0.010, 'sine', 0, 1180),
+        click: () => { tinyTone(520, 0.045, 0.018, 'triangle'); tinyTone(940, 0.035, 0.006, 'sine', 0.012); },
+        select: () => { tinyTone(700, 0.050, 0.014, 'sine'); tinyTone(1040, 0.042, 0.008, 'sine', 0.030); },
+        open: () => { tinyTone(420, 0.075, 0.016, 'sine'); tinyTone(760, 0.090, 0.014, 'sine', 0.045); tinyTone(1180, 0.115, 0.009, 'sine', 0.095); },
+        boot: () => { tinyTone(180, 0.18, 0.020, 'sine', 0, 300); tinyTone(520, 0.12, 0.012, 'triangle', 0.09, 680); tinyTone(980, 0.16, 0.010, 'sine', 0.18, 1240); },
+        success: () => { tinyTone(680, 0.08, 0.014, 'sine'); tinyTone(980, 0.12, 0.012, 'sine', 0.060); },
+        error: () => { tinyTone(220, 0.11, 0.016, 'sine'); tinyTone(160, 0.13, 0.010, 'triangle', 0.055); },
+        toggle: () => tinyTone(760, 0.055, 0.014, 'sine', 0, 920)
+      };
+      (profile[type] || profile.click)();
+    }
+
+    function playBootSequence() {
+      if (!soundEnabled || !audioCtx) return;
+      // Soft JARVIS-style boot pattern: very low-volume, clean, premium ticks and sweeps.
+      tinyTone(210, 0.16, 0.018, 'sine', 0.00, 330);
+      tinyTone(520, 0.055, 0.010, 'triangle', 0.22, 720);
+      tinyTone(760, 0.040, 0.008, 'sine', 0.42, 960);
+      tinyTone(360, 0.105, 0.012, 'sine', 0.62, 540);
+      tinyTone(940, 0.045, 0.008, 'sine', 0.88, 1160);
+      tinyTone(480, 0.080, 0.010, 'triangle', 1.14, 690);
+      tinyTone(1180, 0.050, 0.007, 'sine', 1.42, 1480);
+      tinyTone(620, 0.115, 0.012, 'sine', 1.72, 880);
+      tinyTone(980, 0.140, 0.010, 'sine', 2.12, 1320);
+    }
+
+    function toggleSound() {
+      initAudio();
+      soundEnabled = !soundEnabled;
+      updateSoundIcon();
+      if (soundEnabled) playSfx('success');
+    }
+
+    function updateSoundIcon() {
+      document.querySelectorAll('.sound-btn').forEach(btn => {
+        btn.textContent = soundEnabled ? '🔊' : '🔇';
+        btn.title = soundEnabled ? 'Sound on' : 'Sound off';
+      });
+    }
+
+    function startExperience() {
+      initAudio();
+      playSfx('boot');
+      playBootSequence();
+      document.body.className = 'booting';
+      setTimeout(() => playSfx('select'), 820);
+      setTimeout(() => playSfx('toggle'), 1600);
+      setTimeout(() => {
+        playSfx('success');
+        showLauncher(false);
+      }, 2600);
+    }
+
+    function showLauncher(withSound = true) {
+      if (withSound) playSfx('open');
+      document.body.className = 'launcher-active';
+      const grid = document.getElementById('toolGrid');
+      if (grid) grid.classList.remove('module-focus');
+      document.querySelectorAll('.card[data-module]').forEach(card => card.classList.remove('active-tool-card'));
+    }
+
+    function openModule(moduleName) {
+      initAudio();
+      playSfx('open');
+      document.body.className = 'workspace-active';
+      const grid = document.getElementById('toolGrid');
+      if (grid) grid.classList.add('module-focus');
+      document.querySelectorAll('.card[data-module]').forEach(card => {
+        card.classList.toggle('active-tool-card', card.dataset.module === moduleName);
+      });
+      setTimeout(() => {
+        const active = document.querySelector(`.card[data-module="${moduleName}"]`);
+        if (active) active.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    }
+
+    document.addEventListener('pointerdown', () => initAudio(), { capture: true });
+    document.addEventListener('pointerover', event => {
+      const target = event.target.closest('button, a, select, input[type="file"], input[type="checkbox"], .column-check-item, .sheetItem, .filterItem, .launch-card');
+      if (target && target !== window.__lastSoundHoverTarget) {
+        window.__lastSoundHoverTarget = target;
+        playSfx('hover');
+      }
+    });
+    document.addEventListener('click', event => {
+      if (event.target.closest('button, a, .launch-card, .column-check-item')) playSfx('click');
+    });
+    document.addEventListener('change', event => {
+      if (event.target.matches('select, input[type="file"], input[type="checkbox"]')) playSfx('select');
+    });
+
+    const nativeAlert = window.alert.bind(window);
+    window.alert = function(message) {
+      playSfx('error');
+      setTimeout(() => nativeAlert(message), 20);
+    };
+
+    let excelSheets = {};
+    let groupedFiles = [];
+    let latestSummaryData = [];
+    let selectedBreakerGroups = new Set();
+    let commonFinderResults = null;
+    let breakerWorkbook = null;
+    let finderPrimaryWorkbook = null;
+    let finderSecondaryWorkbook = null;
+    let excelDataUpdaterResult = null;
+    let updaterSourceWorkbook = null;
+    let updaterTargetWorkbook = null;
+    let updaterSourceFileBuffer = null;
+    let updaterTargetFileBuffer = null;
+
+    (function initTheme() {
+      const root = document.documentElement;
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      updateThemeIcon();
+    })();
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      updateThemeIcon();
+      playSfx('toggle');
+    }
+
+    function updateThemeIcon() {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.textContent = isLight ? '🌙' : '☀️';
+      });
+    }
+
+    function sanitizeExcelFileName(name, fallback) {
+      let finalName = String(name || '').replace(/[\\/:*?"<>|]/g, '').trim();
+      if (!finalName) finalName = fallback;
+      if (!finalName.toLowerCase().endsWith('.xlsx')) finalName += '.xlsx';
+      return finalName;
+    }
+
+    function triggerBlobDownload(blob, fileName) {
+      playSfx('success');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 400);
+    }
+
+    function workbookToBlob(workbook) {
+      const buf = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+      return new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    }
+
+    async function uploadExcel() {
+      const file = document.getElementById('excelFile').files[0];
+      const column = document.getElementById('columnName').value.trim();
+      if (!file || !column) { alert('Please select a file and column'); return; }
+      if (!breakerWorkbook) {
+        const data = await file.arrayBuffer();
+        breakerWorkbook = XLSX.read(data);
+        fillSheetSelect(breakerWorkbook, 'breakerSheet', 'Select Sheet');
+      }
+      const sheetName = document.getElementById('breakerSheet').value || breakerWorkbook.SheetNames[0];
+      const json = getRowsFromWorkbook(breakerWorkbook, sheetName);
+      excelSheets = {};
+      latestSummaryData = [];
+      selectedBreakerGroups = new Set();
+
+      json.forEach(row => {
+        const key = row[column];
+        if (!key) return;
+        if (!excelSheets[key]) excelSheets[key] = [];
+        excelSheets[key].push(row);
+      });
+
+      Object.keys(excelSheets).forEach(name => {
+        latestSummaryData.push({ Name: name, Total: excelSheets[name].length });
+      });
+
+      document.getElementById('breakerResultTools').style.display = 'block';
+      document.getElementById('summaryControls').style.display = 'block';
+      document.getElementById('breakerFilterBox').style.display = 'block';
+      document.getElementById('breakerDataSearch').value = '';
+      document.getElementById('breakerSearch').value = '';
+      refreshBreakerSelectionViews();
+    }
+
+    function getSelectedColumnTitle() {
+      return document.getElementById('columnName').value.trim() || 'Name';
+    }
+
+    function buildStyledSummarySheet(summaryData, firstColumnTitle = 'Name') {
+      const grandTotal = summaryData.reduce((sum, item) => sum + Number(item.Total || 0), 0);
+      const aoa = [
+        [firstColumnTitle, 'Total'],
+        ...summaryData.map(item => [item.Name, Number(item.Total || 0)]),
+        ['Overall Total', grandTotal]
+      ];
+
+      const ws = XLSX.utils.aoa_to_sheet(aoa);
+      ws['!cols'] = [{ wch: 45 }, { wch: 20 }];
+
+      const range = XLSX.utils.decode_range(ws['!ref']);
+      const lastRow = range.e.r;
+
+      for (let R = range.s.r; R <= range.e.r; ++R) {
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+          const addr = XLSX.utils.encode_cell({ r: R, c: C });
+          if (!ws[addr]) continue;
+
+          const isHeader = R === 0;
+          const isTotalRow = R === lastRow;
+
+          ws[addr].s = {
+            font: { bold: isHeader || isTotalRow, sz: 12, color: { rgb: '111111' } },
+            alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+            fill: { fgColor: { rgb: (isHeader || isTotalRow) ? 'DDEBFF' : 'FFFFFF' } },
+            border: {
+              top: { style: 'thin', color: { rgb: '000000' } },
+              bottom: { style: 'thin', color: { rgb: '000000' } },
+              left: { style: 'thin', color: { rgb: '000000' } },
+              right: { style: 'thin', color: { rgb: '000000' } }
+            }
+          };
+        }
+      }
+      return ws;
+    }
+
+    function downloadSummaryFile(fileName) {
+      if (!latestSummaryData.length) { alert('Please break an Excel file first'); return; }
+      const ws = buildStyledSummarySheet(latestSummaryData, getSelectedColumnTitle());
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Summary');
+      XLSX.writeFile(wb, fileName);
+    }
+
+    function downloadSummaryDefault() {
+      const today = new Date();
+      const d = String(today.getDate()).padStart(2, '0');
+      const m = String(today.getMonth() + 1).padStart(2, '0');
+      downloadSummaryFile(`${d}-${m}-${today.getFullYear()}.xlsx`);
+    }
+
+    function toggleCustomSummaryBox() {
+      const box = document.getElementById('customSummaryBox');
+      box.style.display = (box.style.display === 'none' || !box.style.display) ? 'block' : 'none';
+    }
+
+    function downloadSummaryCustom() {
+      let name = document.getElementById('customSummaryName').value.trim();
+      if (!name) { alert('Enter a custom file name'); return; }
+      name = sanitizeExcelFileName(name, 'Summary.xlsx');
+      downloadSummaryFile(name);
+    }
+
+    function parseBreakerSearchTerms(inputId) {
+      const input = document.getElementById(inputId);
+      return String(input ? input.value : '')
+        .split(',')
+        .map(term => term.trim().toLowerCase())
+        .filter(Boolean);
+    }
+
+    function getBreakerDataSearchTerms() {
+      return parseBreakerSearchTerms('breakerDataSearch');
+    }
+
+    function getSearchTerms() {
+      return parseBreakerSearchTerms('breakerSearch');
+    }
+
+    function nameMatchesTerms(name, terms) {
+      if (!terms.length) return true;
+      const lower = String(name).toLowerCase();
+      return terms.some(term => lower.includes(term));
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']|'/g, ch => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[ch]));
+    }
+
+    function getSelectedBreakerSummaryData() {
+      return Array.from(selectedBreakerGroups)
+        .filter(name => excelSheets[name])
+        .sort((a, b) => String(a).localeCompare(String(b)))
+        .map(name => ({ Name: name, Total: excelSheets[name].length }));
+    }
+
+    function updateBreakerSelectionStatus() {
+      const status = document.getElementById('breakerSelectionStatus');
+      if (!status) return;
+      const validSelected = Array.from(selectedBreakerGroups).filter(name => excelSheets[name]);
+      const selectedRows = validSelected.reduce((sum, name) => sum + excelSheets[name].length, 0);
+      status.textContent = `${validSelected.length} of ${Object.keys(excelSheets).length} groups selected • ${selectedRows} rows`;
+    }
+
+    function renderSelectedBreakerSummaryPreview() {
+      const preview = document.getElementById('selectedBreakerSummaryPreview');
+      if (!preview) return;
+
+      const data = getSelectedBreakerSummaryData();
+      if (!data.length) {
+        preview.style.display = 'none';
+        preview.innerHTML = '';
+        return;
+      }
+
+      const columnTitle = getSelectedColumnTitle();
+      const grandTotal = data.reduce((sum, item) => sum + Number(item.Total || 0), 0);
+      const rows = data.map(item => `
+        <tr>
+          <td>${escapeHtml(item.Name)}</td>
+          <td>${item.Total}</td>
+        </tr>
+      `).join('');
+
+      preview.innerHTML = `
+        <div class="selected-summary-title">Selected ${escapeHtml(columnTitle)} Summary</div>
+        <table class="selected-summary-table">
+          <thead>
+            <tr><th>${escapeHtml(columnTitle)}</th><th>Total</th></tr>
+          </thead>
+          <tbody>
+            ${rows}
+            <tr><td>Overall Total</td><td>${grandTotal}</td></tr>
+          </tbody>
+        </table>
+      `;
+      preview.style.display = 'block';
+    }
+
+    function renderBreakerDataList() {
+      const list = document.getElementById('excelResult');
+      const terms = getBreakerDataSearchTerms();
+      const keys = Object.keys(excelSheets).sort((a, b) => String(a).localeCompare(String(b)));
+      const filtered = keys.filter(name => nameMatchesTerms(name, terms));
+
+      list.innerHTML = '';
+      list.style.display = 'block';
+
+      if (!filtered.length) {
+        list.innerHTML = '<div class="breaker-empty-result">No matching broken data found</div>';
+        updateBreakerSelectionStatus();
+        return;
+      }
+
+      filtered.forEach(name => {
+        const row = document.createElement('div');
+        row.className = 'sheetItem';
+
+        const left = document.createElement('div');
+        left.className = 'breaker-row-left';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = selectedBreakerGroups.has(name);
+        checkbox.setAttribute('aria-label', `Select ${name}`);
+        checkbox.onchange = function() {
+          this.checked ? selectedBreakerGroups.add(name) : selectedBreakerGroups.delete(name);
+          refreshBreakerSelectionViews();
+        };
+
+        const copy = document.createElement('div');
+        copy.className = 'breaker-row-copy';
+
+        const title = document.createElement('div');
+        title.className = 'sheet-name';
+        title.textContent = name;
+
+        const count = document.createElement('div');
+        count.className = 'sheet-count';
+        count.textContent = `${excelSheets[name].length} rows`;
+
+        copy.appendChild(title);
+        copy.appendChild(count);
+        left.appendChild(checkbox);
+        left.appendChild(copy);
+
+        const actions = document.createElement('div');
+        actions.className = 'breaker-row-actions';
+
+        const downloadButton = document.createElement('button');
+        downloadButton.className = 'btn-green';
+        downloadButton.style.cssText = 'padding:6px 12px;font-size:12px;';
+        downloadButton.textContent = '📥 Download';
+        downloadButton.onclick = () => downloadSheet(name);
+
+        actions.appendChild(downloadButton);
+        row.appendChild(left);
+        row.appendChild(actions);
+        list.appendChild(row);
+      });
+
+      updateBreakerSelectionStatus();
+    }
+
+    function renderBreakerSelectionList() {
+      const list = document.getElementById('breakerSelectionList');
+      const terms = getSearchTerms();
+      const keys = Object.keys(excelSheets).sort((a, b) => String(a).localeCompare(String(b)));
+      const filtered = keys.filter(name => nameMatchesTerms(name, terms));
+
+      list.innerHTML = '';
+      list.style.display = 'block';
+
+      if (!filtered.length) {
+        list.innerHTML = '<div class="filterItem"><div class="filterLeft">No matching groups found</div></div>';
+        renderSelectedBreakerSummaryPreview();
+        return;
+      }
+
+      filtered.forEach(name => {
+        const row = document.createElement('div');
+        row.className = 'filterItem';
+
+        const left = document.createElement('div');
+        left.className = 'filterLeft';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = selectedBreakerGroups.has(name);
+        checkbox.onchange = function() {
+          this.checked ? selectedBreakerGroups.add(name) : selectedBreakerGroups.delete(name);
+          refreshBreakerSelectionViews();
+        };
+
+        const text = document.createElement('span');
+        text.textContent = name;
+        left.appendChild(checkbox);
+        left.appendChild(text);
+
+        const badge = document.createElement('div');
+        badge.className = 'countBadge';
+        badge.textContent = `${excelSheets[name].length} rows`;
+
+        row.appendChild(left);
+        row.appendChild(badge);
+        list.appendChild(row);
+      });
+
+      renderSelectedBreakerSummaryPreview();
+    }
+
+    function refreshBreakerSelectionViews() {
+      renderBreakerDataList();
+      renderBreakerSelectionList();
+      updateBreakerSelectionStatus();
+      renderSelectedBreakerSummaryPreview();
+    }
+
+    function selectAllVisibleBreakerData() {
+      const terms = getBreakerDataSearchTerms();
+      Object.keys(excelSheets).forEach(name => {
+        if (nameMatchesTerms(name, terms)) selectedBreakerGroups.add(name);
+      });
+      refreshBreakerSelectionViews();
+    }
+
+    function selectAllVisibleBreakerGroups() {
+      const terms = getSearchTerms();
+      Object.keys(excelSheets).forEach(name => {
+        if (nameMatchesTerms(name, terms)) selectedBreakerGroups.add(name);
+      });
+      refreshBreakerSelectionViews();
+    }
+
+    function clearSelectedBreakerGroups() {
+      selectedBreakerGroups.clear();
+      refreshBreakerSelectionViews();
+    }
+
+    function downloadSelectedBreakerSummary() {
+      const summaryData = getSelectedBreakerSummaryData();
+      if (!summaryData.length) { alert('Please select groups first'); return; }
+      const ws = buildStyledSummarySheet(summaryData, getSelectedColumnTitle());
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Selected_Summary');
+      XLSX.writeFile(wb, 'Selected_Course_Summary.xlsx');
+    }
+
+    function createBreakerWorkbook(groupName) {
+      const rows = excelSheets[groupName] || [];
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Data');
+      return wb;
+    }
+
+    function getSafeBreakerEntryName(groupName, usedNames) {
+      const baseFile = sanitizeExcelFileName(groupName, 'Broken_Data.xlsx');
+      const dotIndex = baseFile.toLowerCase().lastIndexOf('.xlsx');
+      const base = dotIndex >= 0 ? baseFile.slice(0, dotIndex) : baseFile;
+      let candidate = `${base}.xlsx`;
+      let counter = 2;
+      while (usedNames.has(candidate.toLowerCase())) {
+        candidate = `${base}_${counter}.xlsx`;
+        counter++;
+      }
+      usedNames.add(candidate.toLowerCase());
+      return candidate;
+    }
+
+    async function downloadBreakerGroupsAsZip(groupNames, zipFileName) {
+      const validGroups = groupNames.filter(name => excelSheets[name]);
+      if (!validGroups.length) {
+        alert('No broken data is available for download');
+        return;
+      }
+
+      const zip = new JSZip();
+      const usedNames = new Set();
+      validGroups
+        .slice()
+        .sort((a, b) => String(a).localeCompare(String(b)))
+        .forEach(name => {
+          const workbook = createBreakerWorkbook(name);
+          const buffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+          zip.file(getSafeBreakerEntryName(name, usedNames), buffer);
+        });
+
+      const blob = await zip.generateAsync({ type: 'blob' });
+      triggerBlobDownload(blob, zipFileName);
+    }
+
+    async function downloadSelectedBreakerData() {
+      const selected = Array.from(selectedBreakerGroups);
+      if (!selected.length) {
+        alert('Please select at least one group first');
+        return;
+      }
+      await downloadBreakerGroupsAsZip(selected, 'Selected_Broken_Data.zip');
+    }
+
+    async function downloadAllBreakerData() {
+      const allGroups = Object.keys(excelSheets);
+      if (!allGroups.length) {
+        alert('Please break an Excel file first');
+        return;
+      }
+      await downloadBreakerGroupsAsZip(allGroups, 'All_Broken_Data.zip');
+    }
+
+    function downloadSheet(name) {
+      const wb = createBreakerWorkbook(name);
+      XLSX.writeFile(wb, sanitizeExcelFileName(name, 'Sheet1.xlsx'));
+    }
+
+    function clearExcel() {
+      ['excelResult', 'breakerSelectionList', 'selectedBreakerSummaryPreview'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.innerHTML = '';
+      });
+
+      document.getElementById('excelResult').style.display = 'none';
+      document.getElementById('selectedBreakerSummaryPreview').style.display = 'none';
+      document.getElementById('excelFile').value = '';
+      document.getElementById('breakerSheet').innerHTML = '<option value="">Select Sheet</option>';
+      document.getElementById('breakerSheetWrap').style.display = 'none';
+      document.getElementById('columnName').innerHTML = '<option value="">Select Column Name</option>';
+      document.getElementById('breakerResultTools').style.display = 'none';
+      document.getElementById('summaryControls').style.display = 'none';
+      document.getElementById('customSummaryBox').style.display = 'none';
+      document.getElementById('customSummaryName').value = '';
+      document.getElementById('breakerFilterBox').style.display = 'none';
+      document.getElementById('breakerDataSearch').value = '';
+      document.getElementById('breakerSearch').value = '';
+
+      const status = document.getElementById('breakerSelectionStatus');
+      if (status) status.textContent = '0 groups selected';
+
+      excelSheets = {};
+      latestSummaryData = [];
+      selectedBreakerGroups = new Set();
+      breakerWorkbook = null;
+    }
+
+    async function addGroup(event) {
+      const files = Array.from(event.target.files);
+      if (!files.length) return;
+      let sheetName = prompt('Sheet name for this group after merge?');
+      if (!sheetName || !sheetName.trim()) { alert('Sheet name is required'); return; }
+
+      const preparedFiles = [];
+      for (const file of files) {
+        try {
+          const buffer = await file.arrayBuffer();
+          const workbook = XLSX.read(buffer);
+          const sheetNames = workbook.SheetNames || [];
+          preparedFiles.push({
+            file,
+            workbook,
+            sheetNames,
+            selectedSheet: sheetNames[0] || ''
+          });
+        } catch (err) {
+          alert(`Could not read ${file.name}. Please upload a valid Excel file.`);
+          return;
+        }
+      }
+
+      groupedFiles.push({ sheetName: sheetName.trim(), files: preparedFiles });
+      renderGroups();
+      event.target.value = '';
+    }
+
+    function updateMergeSourceSheet(groupIndex, fileIndex, sheetName) {
+      if (!groupedFiles[groupIndex] || !groupedFiles[groupIndex].files[fileIndex]) return;
+      groupedFiles[groupIndex].files[fileIndex].selectedSheet = sheetName;
+      playSfx('select');
+    }
+
+    function renderGroups() {
+      const container = document.getElementById('groupList');
+      container.innerHTML = '';
+      if (!groupedFiles.length) { container.style.display = 'none'; return; }
+      container.style.display = 'block';
+      groupedFiles.forEach((group, groupIndex) => {
+        const div = document.createElement('div');
+        div.className = 'groupBox';
+        let html = `<div class="group-title">📑 ${escapeHtml(group.sheetName)}</div>`;
+        group.files.forEach((item, fileIndex) => {
+          const sheetSelect = item.sheetNames.length > 1
+            ? `<select class="merge-source-sheet-select" onchange="updateMergeSourceSheet(${groupIndex}, ${fileIndex}, this.value)">${item.sheetNames.map(name => `<option value="${escapeHtml(name)}" ${name === item.selectedSheet ? 'selected' : ''}>${escapeHtml(name)}</option>`).join('')}</select>`
+            : `<span class="sheet-hint">Sheet: ${escapeHtml(item.selectedSheet || 'Sheet1')}</span>`;
+          html += `
+            <div class="group-file-row">
+              <div>
+                <div class="group-file">📄 ${escapeHtml(item.file.name)}</div>
+                ${item.sheetNames.length > 1 ? '<span class="sheet-hint">Multiple worksheets found. Select the sheet to merge.</span>' : ''}
+              </div>
+              ${sheetSelect}
+            </div>`;
+        });
+        div.innerHTML = html;
+        container.appendChild(div);
+      });
+    }
+
+    async function mergeExcels() {
+      if (!groupedFiles.length) { alert('Please add files to merge'); return; }
+      const zip = new JSZip();
+      const fileMap = {};
+      groupedFiles.forEach(group => {
+        group.files.forEach(item => {
+          let base = item.file.name.replace(/admission/gi,'').replace(/registration/gi,'').replace(/registrations/gi,'').replace(/_/g,'').replace(/-/g,'').replace(/\s/g,'').replace('.xlsx','').toLowerCase();
+          if (!fileMap[base]) fileMap[base] = [];
+          fileMap[base].push({ file: item.file, workbook: item.workbook, sourceSheet: item.selectedSheet, sheetName: group.sheetName });
+        });
+      });
+      for (let key in fileMap) {
+        const cur = fileMap[key];
+        const newWB = XLSX.utils.book_new();
+        for (let i = 0; i < cur.length; i++) {
+          const c = cur[i];
+          const sheet = c.workbook.Sheets[c.sourceSheet] || c.workbook.Sheets[c.workbook.SheetNames[0]];
+          let sName = c.sheetName;
+          if (i > 0) sName += '_' + (i + 1);
+          XLSX.utils.book_append_sheet(newWB, sheet, sName.substring(0, 31));
+        }
+        const buf = XLSX.write(newWB, { type: 'array', bookType: 'xlsx' });
+        zip.file(key + '.xlsx', buf);
+      }
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(zipBlob);
+      const dl = document.getElementById('downloadZip');
+      dl.href = url;
+      dl.download = 'Merged_Excels.zip';
+      document.getElementById('mergerDownloadWrap').style.display = 'block';
+    }
+
+    function clearAll() {
+      groupedFiles = [];
+      document.getElementById('groupList').style.display = 'none';
+      document.getElementById('groupList').innerHTML = '';
+      document.getElementById('mergerDownloadWrap').style.display = 'none';
+      document.getElementById('downloadZip').removeAttribute('href');
+    }
+
+    function normalizeValue(value) {
+      return String(value || '').trim().toUpperCase().replace(/[\/\-\s]/g, '');
+    }
+
+    async function loadColumns(file, selectId) {
+      if (!file) return;
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data);
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      const headers = json[0] || [];
+      const sel = document.getElementById(selectId);
+      sel.innerHTML = '<option value="">Select Column</option>';
+      headers.forEach(h => {
+        const op = document.createElement('option');
+        op.value = h;
+        op.textContent = h;
+        sel.appendChild(op);
+      });
+    }
+
+    function getRowsAndSheet(fileArrayBuffer) {
+      const wb = XLSX.read(fileArrayBuffer);
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      return XLSX.utils.sheet_to_json(sheet);
+    }
+
+    async function processCommonFinder() {
+      const pFile = document.getElementById('finderPrimaryFile').files[0];
+      const sFile = document.getElementById('finderSecondaryFile').files[0];
+      const pCol = document.getElementById('finderPrimaryColumn').value;
+      const sCol = document.getElementById('finderSecondaryColumn').value;
+      if (!pFile || !sFile || !pCol || !sCol) { alert('Please select both files and columns'); return; }
+      if (!finderPrimaryWorkbook) finderPrimaryWorkbook = XLSX.read(await pFile.arrayBuffer());
+      if (!finderSecondaryWorkbook) finderSecondaryWorkbook = XLSX.read(await sFile.arrayBuffer());
+      const primarySheet = document.getElementById('finderPrimarySheet').value || finderPrimaryWorkbook.SheetNames[0];
+      const secondarySheet = document.getElementById('finderSecondarySheet').value || finderSecondaryWorkbook.SheetNames[0];
+      const pJson = getRowsFromWorkbook(finderPrimaryWorkbook, primarySheet);
+      const sJson = getRowsFromWorkbook(finderSecondaryWorkbook, secondarySheet);
+      const secondaryMap = new Map();
+      sJson.forEach((row, index) => {
+        const key = normalizeValue(row[sCol]);
+        if (!secondaryMap.has(key)) secondaryMap.set(key, []);
+        secondaryMap.get(key).push({ row, index });
+      });
+      const usedSecondary = new Set();
+      const commonRows = [];
+      const primaryRemaining = [];
+      pJson.forEach(row => {
+        const key = normalizeValue(row[pCol]);
+        const matches = secondaryMap.get(key) || [];
+        const available = matches.find(item => !usedSecondary.has(item.index) && key !== '');
+        if (available) {
+          usedSecondary.add(available.index);
+          commonRows.push(row);
+        } else {
+          primaryRemaining.push(row);
+        }
+      });
+      const secondaryRemaining = sJson.filter((_, idx) => !usedSecondary.has(idx));
+      commonFinderResults = {
+        commonBlob: workbookToBlob(createWorkbook(commonRows, 'Common_Data')),
+        primaryBlob: workbookToBlob(createWorkbook(primaryRemaining, 'Primary_Remaining')),
+        secondaryBlob: workbookToBlob(createWorkbook(secondaryRemaining, 'Secondary_Remaining')),
+        commonCount: commonRows.length,
+        primaryCount: primaryRemaining.length,
+        secondaryCount: secondaryRemaining.length
+      };
+      document.getElementById('finderStatus').style.display = 'block';
+      document.getElementById('finderStatus').textContent = `Common rows: ${commonFinderResults.commonCount}, Primary remaining: ${commonFinderResults.primaryCount}, Secondary remaining: ${commonFinderResults.secondaryCount}. Enter file names and download the files.`;
+      document.getElementById('finderDownloadWrap').style.display = 'block';
+      document.getElementById('commonFileName').value = 'Common_Data';
+      document.getElementById('primaryRemainingFileName').value = 'Primary_Remaining';
+      document.getElementById('secondaryRemainingFileName').value = 'Secondary_Remaining';
+    }
+
+    function createWorkbook(rows, sheetName) {
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, sheetName.substring(0, 31) || 'Sheet1');
+      return wb;
+    }
+
+    function downloadCommonFinderFiles() {
+      if (!commonFinderResults) { alert('Please run Start first'); return; }
+      const commonName = sanitizeExcelFileName(document.getElementById('commonFileName').value, 'Common_Data.xlsx');
+      const primaryName = sanitizeExcelFileName(document.getElementById('primaryRemainingFileName').value, 'Primary_Remaining.xlsx');
+      const secondaryName = sanitizeExcelFileName(document.getElementById('secondaryRemainingFileName').value, 'Secondary_Remaining.xlsx');
+      triggerBlobDownload(commonFinderResults.commonBlob, commonName);
+      setTimeout(() => triggerBlobDownload(commonFinderResults.primaryBlob, primaryName), 250);
+      setTimeout(() => triggerBlobDownload(commonFinderResults.secondaryBlob, secondaryName), 500);
+    }
+
+    function downloadCommonFile() {
+      if (!commonFinderResults) { alert('Please run Start first'); return; }
+      const fileName = sanitizeExcelFileName(document.getElementById('commonFileName').value, 'Common_Data.xlsx');
+      triggerBlobDownload(commonFinderResults.commonBlob, fileName);
+    }
+
+    function downloadPrimaryFile() {
+      if (!commonFinderResults) { alert('Please run Start first'); return; }
+      const fileName = sanitizeExcelFileName(document.getElementById('primaryRemainingFileName').value, 'Primary_Remaining.xlsx');
+      triggerBlobDownload(commonFinderResults.primaryBlob, fileName);
+    }
+
+    function downloadSecondaryFile() {
+      if (!commonFinderResults) { alert('Please run Start first'); return; }
+      const fileName = sanitizeExcelFileName(document.getElementById('secondaryRemainingFileName').value, 'Secondary_Remaining.xlsx');
+      triggerBlobDownload(commonFinderResults.secondaryBlob, fileName);
+    }
+
+    function resetCommonFinderPrompt() {
+      document.getElementById('finderDownloadWrap').style.display = 'none';
+      document.getElementById('commonFileName').value = '';
+      document.getElementById('primaryRemainingFileName').value = '';
+      document.getElementById('secondaryRemainingFileName').value = '';
+    }
+
+    function clearCommonFinder() {
+      document.getElementById('finderPrimaryFile').value = '';
+      document.getElementById('finderSecondaryFile').value = '';
+      document.getElementById('finderPrimarySheet').innerHTML = '<option value="">Select Sheet</option>';
+      document.getElementById('finderSecondarySheet').innerHTML = '<option value="">Select Sheet</option>';
+      document.getElementById('finderPrimarySheetWrap').style.display = 'none';
+      document.getElementById('finderSecondarySheetWrap').style.display = 'none';
+      document.getElementById('finderPrimaryColumn').innerHTML = '<option value="">Select Primary Column</option>';
+      document.getElementById('finderSecondaryColumn').innerHTML = '<option value="">Select Secondary Column</option>';
+      document.getElementById('finderStatus').style.display = 'none';
+      document.getElementById('finderStatus').textContent = '';
+      document.getElementById('finderDownloadWrap').style.display = 'none';
+      resetCommonFinderPrompt();
+      commonFinderResults = null;
+      finderPrimaryWorkbook = null;
+      finderSecondaryWorkbook = null;
+    }
+
+
+    
+    async function loadBreakerWorkbook(file) {
+      if (!file) return;
+      try {
+        const buffer = await file.arrayBuffer();
+        breakerWorkbook = XLSX.read(buffer);
+        fillSheetSelect(breakerWorkbook, 'breakerSheet', 'Select Sheet');
+        refreshBreakerSheetColumns();
+      } catch (err) {
+        alert('Please upload a valid Excel file.');
+      }
+    }
+
+    function refreshBreakerSheetColumns() {
+      const sheetName = document.getElementById('breakerSheet').value || (breakerWorkbook && breakerWorkbook.SheetNames[0]);
+      const headers = getHeadersFromWorkbook(breakerWorkbook, sheetName);
+      fillColumnSelectFromHeaders(headers, 'columnName', 'Select Column Name');
+    }
+
+    async function loadFinderPrimaryWorkbook(file) {
+      if (!file) return;
+      try {
+        const buffer = await file.arrayBuffer();
+        finderPrimaryWorkbook = XLSX.read(buffer);
+        fillSheetSelect(finderPrimaryWorkbook, 'finderPrimarySheet', 'Select Sheet');
+        refreshFinderPrimarySheetColumns();
+      } catch (err) {
+        alert('Please upload a valid primary Excel file.');
+      }
+    }
+
+    async function loadFinderSecondaryWorkbook(file) {
+      if (!file) return;
+      try {
+        const buffer = await file.arrayBuffer();
+        finderSecondaryWorkbook = XLSX.read(buffer);
+        fillSheetSelect(finderSecondaryWorkbook, 'finderSecondarySheet', 'Select Sheet');
+        refreshFinderSecondarySheetColumns();
+      } catch (err) {
+        alert('Please upload a valid secondary Excel file.');
+      }
+    }
+
+    function refreshFinderPrimarySheetColumns() {
+      const sheetName = document.getElementById('finderPrimarySheet').value || (finderPrimaryWorkbook && finderPrimaryWorkbook.SheetNames[0]);
+      const headers = getHeadersFromWorkbook(finderPrimaryWorkbook, sheetName);
+      fillColumnSelectFromHeaders(headers, 'finderPrimaryColumn', 'Select Primary Column');
+    }
+
+    function refreshFinderSecondarySheetColumns() {
+      const sheetName = document.getElementById('finderSecondarySheet').value || (finderSecondaryWorkbook && finderSecondaryWorkbook.SheetNames[0]);
+      const headers = getHeadersFromWorkbook(finderSecondaryWorkbook, sheetName);
+      fillColumnSelectFromHeaders(headers, 'finderSecondaryColumn', 'Select Secondary Column');
+    }
+
+function fillSheetSelect(workbook, selectId, placeholder) {
+      const sel = document.getElementById(selectId);
+      const wrap = document.getElementById(selectId + 'Wrap');
+      sel.innerHTML = `<option value="">${placeholder}</option>`;
+      if (!workbook || !workbook.SheetNames || !workbook.SheetNames.length) {
+        if (wrap) wrap.style.display = 'none';
+        return;
+      }
+
+      workbook.SheetNames.forEach((name, index) => {
+        const op = document.createElement('option');
+        op.value = name;
+        op.textContent = name;
+        sel.appendChild(op);
+        if (index === 0) sel.value = name;
+      });
+
+      if (workbook.SheetNames.length > 1) {
+        if (wrap) wrap.style.display = 'block';
+      } else {
+        if (wrap) wrap.style.display = 'none';
+      }
+    }
+
+    function getHeadersFromWorkbook(workbook, sheetName) {
+      if (!workbook || !sheetName || !workbook.Sheets[sheetName]) return [];
+      const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, defval: '' });
+      return (rows[0] || []).map(h => String(h || '').trim()).filter(Boolean);
+    }
+
+    function fillColumnSelectFromHeaders(headers, selectId, placeholder) {
+      const sel = document.getElementById(selectId);
+      sel.innerHTML = `<option value="">${placeholder}</option>`;
+      headers.forEach(h => {
+        const op = document.createElement('option');
+        op.value = h;
+        op.textContent = h;
+        sel.appendChild(op);
+      });
+    }
+
+    function renderUpdaterColumnCheckboxes(headers) {
+      const box = document.getElementById('updaterColumnsToAdd');
+      box.innerHTML = '';
+      if (!headers.length) {
+        box.innerHTML = '<div class="column-pick-placeholder">Select columns from Excel A to add into Excel B</div>';
+        return;
+      }
+      headers.forEach(col => {
+        const label = document.createElement('label');
+        label.className = 'column-check-item';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = col;
+        const span = document.createElement('span');
+        span.textContent = col;
+        label.appendChild(cb);
+        label.appendChild(span);
+        box.appendChild(label);
+      });
+    }
+
+    async function loadUpdaterSourceColumns(file) {
+      if (!file) return;
+      updaterSourceFileBuffer = await file.arrayBuffer();
+      updaterSourceWorkbook = XLSX.read(updaterSourceFileBuffer);
+      fillSheetSelect(updaterSourceWorkbook, 'updaterSourceSheet', 'Select Sheet');
+      refreshUpdaterSourceSheetColumns();
+    }
+
+    async function loadUpdaterTargetColumns(file) {
+      if (!file) return;
+      updaterTargetFileBuffer = await file.arrayBuffer();
+      updaterTargetWorkbook = XLSX.read(updaterTargetFileBuffer);
+      fillSheetSelect(updaterTargetWorkbook, 'updaterTargetSheet', 'Select Sheet');
+      refreshUpdaterTargetSheetColumns();
+    }
+
+    function refreshUpdaterSourceSheetColumns() {
+      const sheetName = document.getElementById('updaterSourceSheet').value;
+      const headers = getHeadersFromWorkbook(updaterSourceWorkbook, sheetName);
+      fillColumnSelectFromHeaders(headers, 'updaterSourceMatchColumn', 'Select Matching Column in Excel A');
+      renderUpdaterColumnCheckboxes(headers);
+    }
+
+    function refreshUpdaterTargetSheetColumns() {
+      const sheetName = document.getElementById('updaterTargetSheet').value;
+      const headers = getHeadersFromWorkbook(updaterTargetWorkbook, sheetName);
+      fillColumnSelectFromHeaders(headers, 'updaterTargetMatchColumn', 'Select Matching Column in Excel B');
+    }
+
+    function getSelectedUpdaterColumns() {
+      return Array.from(document.querySelectorAll('#updaterColumnsToAdd input[type="checkbox"]:checked'))
+        .map(cb => cb.value)
+        .filter(Boolean);
+    }
+
+    function getRowsFromWorkbook(workbook, sheetName) {
+      if (!workbook || !sheetName || !workbook.Sheets[sheetName]) return [];
+      return XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
+    }
+
+    function createUpdatedTargetWorkbook(targetWorkbook, targetSheetName, updatedRows) {
+      const newWB = XLSX.utils.book_new();
+      targetWorkbook.SheetNames.forEach(sheetName => {
+        if (sheetName === targetSheetName) {
+          const ws = XLSX.utils.json_to_sheet(updatedRows);
+          XLSX.utils.book_append_sheet(newWB, ws, sheetName.substring(0, 31) || 'Updated');
+        } else {
+          XLSX.utils.book_append_sheet(newWB, targetWorkbook.Sheets[sheetName], sheetName.substring(0, 31));
+        }
+      });
+      return newWB;
+    }
+
+    async function processExcelDataUpdater() {
+      const sourceFile = document.getElementById('updaterSourceFile').files[0];
+      const targetFile = document.getElementById('updaterTargetFile').files[0];
+      const sourceSheet = document.getElementById('updaterSourceSheet').value;
+      const targetSheet = document.getElementById('updaterTargetSheet').value;
+      const sourceMatchCol = document.getElementById('updaterSourceMatchColumn').value;
+      const targetMatchCol = document.getElementById('updaterTargetMatchColumn').value;
+      const columnsToAdd = getSelectedUpdaterColumns();
+
+      if (!sourceFile || !targetFile || !sourceSheet || !targetSheet || !sourceMatchCol || !targetMatchCol || !columnsToAdd.length) {
+        alert('Please select Excel A, Excel B, sheet names, both matching columns, and at least one column to import');
+        return;
+      }
+
+      const sourceRows = getRowsFromWorkbook(updaterSourceWorkbook, sourceSheet);
+      const targetRows = getRowsFromWorkbook(updaterTargetWorkbook, targetSheet);
+
+      const sourceMap = new Map();
+      sourceRows.forEach(row => {
+        const key = normalizeValue(row[sourceMatchCol]);
+        if (key && !sourceMap.has(key)) sourceMap.set(key, row);
+      });
+
+      let matchedCount = 0;
+      let unmatchedCount = 0;
+      const updatedRows = targetRows.map(row => {
+        const key = normalizeValue(row[targetMatchCol]);
+        const sourceRow = sourceMap.get(key);
+        const newRow = { ...row };
+
+        if (key && sourceRow) {
+          matchedCount++;
+          columnsToAdd.forEach(col => {
+            newRow[col] = sourceRow[col] ?? '';
+          });
+        } else {
+          unmatchedCount++;
+          columnsToAdd.forEach(col => {
+            if (!(col in newRow)) newRow[col] = '';
+          });
+        }
+        return newRow;
+      });
+
+      const workbook = createUpdatedTargetWorkbook(updaterTargetWorkbook, targetSheet, updatedRows);
+      excelDataUpdaterResult = {
+        blob: workbookToBlob(workbook),
+        matchedCount,
+        unmatchedCount,
+        totalRows: targetRows.length,
+        addedColumns: columnsToAdd
+      };
+
+      document.getElementById('updaterStatus').style.display = 'block';
+      document.getElementById('updaterStatus').textContent = `Done: In Excel B sheet "${targetSheet}", ${matchedCount} of ${targetRows.length} rows were matched. ${unmatchedCount} rows were not matched. Added/updated columns: ${columnsToAdd.join(', ')}.`;
+      document.getElementById('updaterOutputFileName').value = 'Updated_Excel_B';
+      document.getElementById('updaterDownloadWrap').style.display = 'block';
+    }
+
+    function downloadUpdatedExcelB() {
+      if (!excelDataUpdaterResult) { alert('Please run VLOOKUP first'); return; }
+      const fileName = sanitizeExcelFileName(document.getElementById('updaterOutputFileName').value, 'Updated_Excel_B.xlsx');
+      triggerBlobDownload(excelDataUpdaterResult.blob, fileName);
+    }
+
+    function clearExcelDataUpdater() {
+      document.getElementById('updaterSourceFile').value = '';
+      document.getElementById('updaterTargetFile').value = '';
+      document.getElementById('updaterSourceSheet').innerHTML = '<option value="">Select Sheet</option>';
+      document.getElementById('updaterTargetSheet').innerHTML = '<option value="">Select Sheet</option>';
+      document.getElementById('updaterSourceSheetWrap').style.display = 'none';
+      document.getElementById('updaterTargetSheetWrap').style.display = 'none';
+      document.getElementById('updaterSourceMatchColumn').innerHTML = '<option value="">Select Matching Column in Excel A</option>';
+      document.getElementById('updaterTargetMatchColumn').innerHTML = '<option value="">Select Matching Column in Excel B</option>';
+      document.getElementById('updaterColumnsToAdd').innerHTML = '<div class="column-pick-placeholder">Select columns from Excel A to add into Excel B</div>';
+      document.getElementById('updaterStatus').style.display = 'none';
+      document.getElementById('updaterStatus').textContent = '';
+      document.getElementById('updaterDownloadWrap').style.display = 'none';
+      document.getElementById('updaterOutputFileName').value = '';
+      updaterSourceWorkbook = null;
+      updaterTargetWorkbook = null;
+      updaterSourceFileBuffer = null;
+      updaterTargetFileBuffer = null;
+      excelDataUpdaterResult = null;
+    }
+
+
+    document.getElementById('finderPrimaryFile').addEventListener('change', function() { loadFinderPrimaryWorkbook(this.files[0]); });
+    document.getElementById('finderSecondaryFile').addEventListener('change', function() { loadFinderSecondaryWorkbook(this.files[0]); });
+    document.getElementById('excelFile').addEventListener('change', function() { loadBreakerWorkbook(this.files[0]); });
+    document.getElementById('breakerSheet').addEventListener('change', refreshBreakerSheetColumns);
+    document.getElementById('finderPrimarySheet').addEventListener('change', refreshFinderPrimarySheetColumns);
+    document.getElementById('finderSecondarySheet').addEventListener('change', refreshFinderSecondarySheetColumns);
+    document.getElementById('updaterSourceFile').addEventListener('change', function() { loadUpdaterSourceColumns(this.files[0]); });
+    document.getElementById('updaterTargetFile').addEventListener('change', function() { loadUpdaterTargetColumns(this.files[0]); });
+    document.getElementById('updaterSourceSheet').addEventListener('change', refreshUpdaterSourceSheetColumns);
+    document.getElementById('updaterTargetSheet').addEventListener('change', refreshUpdaterTargetSheetColumns);
+    updateSoundIcon();
+  </script>
+</body>
+</html>

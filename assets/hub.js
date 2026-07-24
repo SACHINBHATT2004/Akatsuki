@@ -7,6 +7,12 @@
   const soundKey = 'akatsuki_hub_sound';
 
   const moduleMap = Object.freeze({
+    'smart-excel-toolkit': {
+      title: 'Smart Excel Toolkit',
+      subtitle: 'Excel breaker, merger, finder and VLOOKUP suite',
+      path: './modules/smart-excel-toolkit/index.html',
+      logo: './assets/logos/smart-excel-toolkit.svg'
+    },
     'publisher-report': {
       title: 'Publisher Report Builder',
       subtitle: 'Publisher and counsellor report workflow',

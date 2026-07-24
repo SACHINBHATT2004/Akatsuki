@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Search Result</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f2f2f2;
+
+            padding: 20px;
+        }
+
+        h2 {
+
+            text-align: center;
+
+            margin-bottom: 20px;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            background: white;
+        }
+
+        th {
+
+            background: #c9c9c9;
+
+            padding: 12px;
+
+            border: 1px solid #aaa;
+
+            text-align: center;
+        }
+
+        td {
+
+            padding: 10px;
+
+            border: 1px solid #bbb;
+        }
+
+        tr:nth-child(even) {
+
+            background: #f9f9f9;
+        }
+
+        tr:hover {
+
+            background: #ececec;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<script>
+
+/* ================= GET DATA ================= */
+
+const data =
+
+    JSON.parse(
+
+        localStorage.getItem("resultData")
+
+    ) || [];
+
+/* ================= HTML ================= */
+
+let html = `
+
+<h2>
+
+    Search Result
+
+</h2>
+
+<table>
+
+<tr>
+
+    <th>Name</th>
+
+    <th>Email</th>
+
+    <th>Mobile No.</th>
+
+    <th>UTM</th>
+
+</tr>
+
+`;
+
+/* ================= ROWS ================= */
+
+data.forEach(row => {
+
+    html += `
+
+    <tr>
+
+        <td>
+
+            ${row["Name"] || "-"}
+
+        </td>
+
+        <td>
+
+            ${row["Email"] || "-"}
+
+        </td>
+
+        <td>
+
+            ${row["Mobile No."] || "-"}
+
+        </td>
+
+        <td>
+
+            ${row["UTM"] || "-"}
+
+        </td>
+
+    </tr>
+
+    `;
+});
+
+/* ================= CLOSE TABLE ================= */
+
+html += `
+
+</table>
+
+`;
+
+/* ================= SHOW ================= */
+
+document.body.innerHTML = html;
+
+</script>
+
+</body>
+
+</html>

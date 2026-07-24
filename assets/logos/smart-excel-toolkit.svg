@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">Tobi spiral mask symbol</title>
+  <desc id="desc">An orange spiral mask inspired module symbol with one central eye.</desc>
+  <defs>
+    <radialGradient id="mask" cx="42%" cy="34%" r="72%">
+      <stop offset="0" stop-color="#ffb15c"/>
+      <stop offset=".52" stop-color="#f36b26"/>
+      <stop offset="1" stop-color="#9d210d"/>
+    </radialGradient>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="2.1" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="48" cy="48" r="38" fill="#120a0a" stroke="#ff7b37" stroke-width="2.6"/>
+  <path d="M48 14c18.8 0 34 15.2 34 34S66.8 82 48 82 14 66.8 14 48 29.2 14 48 14Z" fill="url(#mask)"/>
+  <g fill="none" stroke="#3c0c08" stroke-width="4.2" stroke-linecap="round">
+    <path d="M48 17c17.1 0 31 13.9 31 31"/>
+    <path d="M79 48c0 17.1-13.9 31-31 31"/>
+    <path d="M48 79c-17.1 0-31-13.9-31-31"/>
+    <path d="M17 48c0-17.1 13.9-31 31-31"/>
+    <path d="M48 24c13.3 0 24 10.7 24 24"/>
+    <path d="M72 48c0 13.3-10.7 24-24 24"/>
+    <path d="M48 72c-13.3 0-24-10.7-24-24"/>
+    <path d="M24 48c0-13.3 10.7-24 24-24"/>
+    <path d="M48 32c8.8 0 16 7.2 16 16"/>
+    <path d="M64 48c0 8.8-7.2 16-16 16"/>
+    <path d="M48 64c-8.8 0-16-7.2-16-16"/>
+    <path d="M32 48c0-8.8 7.2-16 16-16"/>
+  </g>
+  <circle cx="48" cy="48" r="9.5" fill="#160708" stroke="#ffd1b1" stroke-width="2.3" filter="url(#glow)"/>
+  <circle cx="48" cy="48" r="4.2" fill="#d71926"/>
+  <circle cx="46.7" cy="46.6" r="1.2" fill="#fff"/>
+</svg>

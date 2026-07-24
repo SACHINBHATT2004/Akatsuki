@@ -1,0 +1,20 @@
+AKATSUKI — GITHUB PAGES UPDATE
+
+1. Extract this ZIP.
+2. Open the extracted AKATSUKI_Tools_Hub_6_Modules folder.
+3. Upload/copy everything INSIDE this folder to the root of your GitHub repository.
+   The repository root must directly show:
+   index.html
+   module.html
+   assets/
+   modules/
+   .nojekyll
+4. Commit the changes.
+5. Open GitHub repository > Settings > Pages.
+6. Select:
+   Source: Deploy from a branch
+   Branch: main
+   Folder: /(root)
+7. Wait for the Pages deployment in the Actions tab to turn green.
+
+Do not upload the outer folder as one extra nested folder, otherwise the main URL may show 404.
