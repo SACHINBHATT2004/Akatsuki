@@ -1,0 +1,2510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrowdFlow Coupons</title>
+
+  <style>
+    :root {
+      --bg: #f7fbff;
+      --bg-2: #fff7ef;
+      --text: #101828;
+      --text-soft: #475467;
+      --muted: #667085;
+      --panel: rgba(255,255,255,.72);
+      --panel-2: rgba(255,255,255,.92);
+      --line: rgba(74, 96, 127, .13);
+      --line-strong: rgba(74, 96, 127, .22);
+      --shadow: 0 24px 70px rgba(31, 77, 141, .12);
+      --blue: #2d7dff;
+      --cyan: #06b6d4;
+      --orange: #ff8a3d;
+      --pink: #ec4899;
+      --violet: #7c3aed;
+      --green: #10b981;
+      --red: #e11d48;
+      --coupon-bg: #fff;
+      --coupon-border: #101828;
+    }
+
+    body.dark {
+      --bg: #07111f;
+      --bg-2: #17111f;
+      --text: #f8fbff;
+      --text-soft: #d0d8e6;
+      --muted: #aeb9ca;
+      --panel: rgba(14,23,40,.68);
+      --panel-2: rgba(22,34,54,.9);
+      --line: rgba(255,255,255,.12);
+      --line-strong: rgba(255,255,255,.22);
+      --shadow: 0 24px 75px rgba(0,0,0,.28);
+      --blue: #76b7ff;
+      --cyan: #4dd8f4;
+      --orange: #ffb076;
+      --pink: #ff7ab8;
+      --violet: #a78bfa;
+      --green: #4ade80;
+      --red: #fb7185;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      min-height: 100%;
+      background: #f7fbff;
+    }
+
+    html.dark-theme {
+      background: #07111f;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(45,125,255,.18), transparent 26%),
+        radial-gradient(circle at 88% 18%, rgba(255,138,61,.16), transparent 26%),
+        radial-gradient(circle at 52% 92%, rgba(6,182,212,.13), transparent 30%),
+        linear-gradient(135deg, var(--bg), var(--bg-2));
+      overflow-x: hidden;
+      background-attachment: fixed;
+      transition: background .35s ease, color .25s ease;
+    }
+
+    .orb {
+      position: fixed;
+      z-index: -2;
+      border-radius: 40% 60% 62% 38% / 42% 44% 56% 58%;
+      background:
+        radial-gradient(circle at 28% 20%, rgba(255,255,255,.72), transparent 15%),
+        linear-gradient(135deg, rgba(45,125,255,.28), rgba(6,182,212,.18), rgba(255,138,61,.16));
+      box-shadow: inset 20px 20px 45px rgba(255,255,255,.25), 0 28px 90px rgba(31,77,141,.12);
+      filter: blur(.1px);
+      opacity: .58;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    .orb.o1 { width: 250px; height: 250px; left: 3vw; top: 15vh; }
+    .orb.o2 { width: 210px; height: 210px; right: 5vw; top: 24vh; animation-delay: -5s; }
+    .orb.o3 { width: 150px; height: 150px; left: 58vw; bottom: 8vh; animation-delay: -8s; opacity: .35; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0,0) rotate(0) scale(1); border-radius: 42% 58% 62% 38% / 44% 45% 55% 56%; }
+      50% { transform: translate(18px,-20px) rotate(8deg) scale(1.04); border-radius: 58% 42% 44% 56% / 58% 38% 62% 42%; }
+      100% { transform: translate(-12px,18px) rotate(-7deg) scale(.97); border-radius: 40% 60% 55% 45% / 40% 58% 42% 60%; }
+    }
+
+    .app {
+      min-height: 100vh;
+      padding: 22px 18px 42px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: min(100%, 1120px);
+      margin: 0 auto;
+    }
+
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(28px) saturate(155%);
+      -webkit-backdrop-filter: blur(28px) saturate(155%);
+    }
+
+    .login-wrap {
+      min-height: calc(100vh - 48px);
+      display: grid;
+      place-items: center;
+    }
+
+    .login-card {
+      width: min(94vw, 420px);
+      padding: 28px;
+      border-radius: 32px;
+      position: relative;
+      overflow: hidden;
+      animation: pop .45s ease both;
+    }
+
+    .login-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, rgba(45,125,255,.14), rgba(255,138,61,.13));
+      border: 1px solid var(--line);
+    }
+
+    .login-logo img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .login-card h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: -1px;
+      line-height: 1.05;
+    }
+
+    .login-card p {
+      margin: 0 0 22px;
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: translateY(14px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .topbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 6px auto 18px;
+      padding: 14px 16px;
+      border-radius: 28px;
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 260px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(45,125,255,.16), rgba(255,138,61,.14));
+      border: 1px solid var(--line);
+      flex: 0 0 auto;
+    }
+
+    .brand-logo img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 23px;
+      letter-spacing: -.8px;
+      line-height: 1.05;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .theme-toggle {
+      width: 112px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel-2);
+      color: var(--text);
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      cursor: pointer;
+      overflow: hidden;
+      font-weight: 850;
+      font-size: 12px;
+    }
+
+    .theme-toggle::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 48px;
+      height: 30px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 10px 28px rgba(45,125,255,.25);
+      transition: transform .25s ease;
+    }
+
+    body.dark .theme-toggle::before { transform: translateX(54px); background: linear-gradient(135deg, var(--violet), var(--pink)); }
+
+    .theme-toggle span {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill {
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-weight: 850;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      outline: none;
+      border-radius: 18px;
+      padding: 14px 15px;
+      color: var(--text);
+      background: var(--panel-2);
+      font-size: 16px;
+      font-weight: 750;
+      transition: .2s ease;
+    }
+
+    input:focus {
+      border-color: rgba(45,125,255,.45);
+      box-shadow: 0 0 0 5px rgba(45,125,255,.12);
+    }
+
+    .field { margin-bottom: 15px; }
+
+    .btn {
+      border: 0;
+      outline: none;
+      border-radius: 16px;
+      padding: 12px 15px;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 12px 28px rgba(45,125,255,.22);
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(45,125,255,.28); }
+    .btn:active { transform: translateY(0); opacity: .88; }
+
+    .btn.full { width: 100%; }
+    .btn.light {
+      color: var(--text);
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+    .btn.danger { background: linear-gradient(135deg, var(--red), var(--pink)); box-shadow: 0 12px 26px rgba(225,29,72,.18); }
+    .btn.success { background: linear-gradient(135deg, var(--green), #0ea5e9); box-shadow: 0 12px 26px rgba(16,185,129,.16); }
+    .btn.small { padding: 8px 11px; border-radius: 13px; font-size: 12px; }
+
+    .error {
+      display: none;
+      padding: 11px 12px;
+      margin-bottom: 14px;
+      border-radius: 16px;
+      color: #fff;
+      font-weight: 850;
+      font-size: 13px;
+      background: linear-gradient(135deg, var(--red), var(--pink));
+    }
+
+    .panel {
+      display: none;
+      animation: fadeUp .35s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-strip {
+      display: none;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .hero-card {
+      border-radius: 30px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+      min-height: 150px;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -55px;
+      width: 190px;
+      height: 190px;
+      border-radius: 45% 55% 65% 35% / 40% 46% 54% 60%;
+      background: linear-gradient(135deg, rgba(45,125,255,.28), rgba(255,138,61,.18));
+    }
+
+    .hero-card h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -1px;
+      line-height: 1.04;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card p {
+      margin: 8px 0 0;
+      color: var(--text-soft);
+      font-size: 14px;
+      font-weight: 650;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .quick-box {
+      padding: 18px;
+      border-radius: 26px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+
+    .quick-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .quick-box strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .section {
+      border-radius: 30px;
+      padding: 20px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 23px;
+      letter-spacing: -.8px;
+      line-height: 1.08;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .stat-card {
+      border-radius: 26px;
+      padding: 16px;
+      min-height: 178px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      transition: .22s ease;
+    }
+
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--card-a), var(--card-b));
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      width: 95px;
+      height: 95px;
+      right: -35px;
+      bottom: -36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--card-a), var(--card-b));
+      opacity: .17;
+    }
+
+    .stat-card[data-counter="A"], .counter-card[data-counter="A"] { --card-a: #2d7dff; --card-b: #06b6d4; }
+    .stat-card[data-counter="B"], .counter-card[data-counter="B"] { --card-a: #7c3aed; --card-b: #ec4899; }
+    .stat-card[data-counter="C"], .counter-card[data-counter="C"] { --card-a: #10b981; --card-b: #0ea5e9; }
+    .stat-card[data-counter="D"], .counter-card[data-counter="D"] { --card-a: #ff8a3d; --card-b: #ef4444; }
+
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .counter-dot {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: white;
+      background: linear-gradient(135deg, var(--card-a), var(--card-b));
+      font-size: 20px;
+      font-weight: 950;
+      box-shadow: 0 12px 24px color-mix(in srgb, var(--card-a), transparent 72%);
+    }
+
+    .stat-card h3 {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .stat-number {
+      margin: 0;
+      font-size: 34px;
+      line-height: .95;
+      letter-spacing: -1.4px;
+      font-weight: 950;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.42);
+      color: var(--text-soft);
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    body.dark .chip { background: rgba(255,255,255,.06); }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .counter-card {
+      min-height: 138px;
+      padding: 17px;
+      border-radius: 26px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: .22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .counter-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--card-a), var(--card-b));
+      opacity: .75;
+    }
+
+    .counter-card::after {
+      content: "";
+      position: absolute;
+      width: 105px;
+      height: 105px;
+      right: -35px;
+      top: -34px;
+      border-radius: 45% 55% 64% 36% / 43% 42% 58% 57%;
+      background: linear-gradient(135deg, var(--card-a), var(--card-b));
+      opacity: .13;
+    }
+
+    .counter-card.active {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--card-a), white 20%);
+      box-shadow: 0 18px 42px color-mix(in srgb, var(--card-a), transparent 84%);
+    }
+
+    .counter-card strong {
+      display: block;
+      font-size: 38px;
+      line-height: 1;
+      letter-spacing: -1.6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .counter-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--text-soft);
+      font-weight: 850;
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-bottom {
+      margin-top: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .generator {
+      border-radius: 30px;
+      padding: 20px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .generator::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 6px;
+      background: linear-gradient(90deg, var(--active-a, var(--blue)), var(--active-b, var(--cyan)));
+      opacity: .9;
+    }
+
+    .gen-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      position: relative;
+      z-index: 1;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-top: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .status {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      color: var(--text);
+      background: color-mix(in srgb, var(--green), transparent 88%);
+      border: 1px solid color-mix(in srgb, var(--green), transparent 65%);
+      font-size: 13px;
+      font-weight: 850;
+      position: relative;
+      z-index: 1;
+    }
+
+    .preview-head {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin: 18px 0 10px;
+    }
+
+    .preview-head h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.6px;
+    }
+
+    .empty-state {
+      border-radius: 28px;
+      padding: 26px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 750;
+      background: var(--panel);
+      border: 1px dashed var(--line-strong);
+    }
+
+    .preview-scroll {
+      width: 100%;
+      overflow: auto;
+      padding-bottom: 12px;
+    }
+
+    .sheet {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 18px;
+      padding: 6mm;
+      background: var(--coupon-bg);
+      border: 1px solid rgba(148,163,184,.65);
+      box-shadow: 0 24px 70px rgba(31,77,141,.12);
+      display: grid;
+      grid-template-columns: repeat(3, 62mm);
+      grid-auto-rows: 28mm;
+      gap: 3mm;
+      align-content: start;
+      justify-content: center;
+      color: #000;
+    }
+
+    .coupon {
+      border: 1.5px dashed var(--coupon-border);
+      border-radius: 2.4mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4.2mm;
+      overflow: hidden;
+      page-break-inside: avoid;
+      background: #fff;
+      color: #000;
+      position: relative;
+      font-family: Arial, Helvetica, sans-serif;
+      isolation: isolate;
+    }
+
+    .coupon::before {
+      content: "";
+      position: absolute;
+      inset: 4.4mm 11mm 4.8mm 11mm;
+      background-image: url('logo.webp');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      opacity: .09;
+      z-index: 0;
+    }
+
+    .coupon::after {
+      content: "";
+      position: absolute;
+      top: 1.6mm;
+      left: 1.8mm;
+      width: 8.4mm;
+      height: 8.4mm;
+      background-image: url('logo.webp');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      opacity: .92;
+      z-index: 1;
+    }
+
+    .coupon .letter,
+    .coupon .number,
+    .coupon .full-code {
+      position: relative;
+      z-index: 2;
+    }
+
+    .coupon .letter {
+      font-size: 42pt;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -1px;
+    }
+
+    .coupon .number {
+      font-size: 31pt;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .coupon .full-code {
+      position: absolute;
+      right: 2mm;
+      bottom: 1.2mm;
+      font-size: 8pt;
+      font-weight: 850;
+      color: #555;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(15, 23, 42, .28);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 99;
+    }
+
+    .modal-backdrop.show { display: flex; }
+
+    .modal-card {
+      width: min(1020px, 96vw);
+      max-height: 88vh;
+      overflow: hidden;
+      border-radius: 30px;
+      display: flex;
+      flex-direction: column;
+      animation: pop .25s ease both;
+    }
+
+    .modal-head {
+      padding: 17px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 23px;
+      letter-spacing: -.8px;
+    }
+
+    .modal-head p {
+      margin: 5px 0 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .modal-body {
+      padding: 17px;
+      overflow: auto;
+    }
+
+    .history-summary {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+
+    .summary-box {
+      padding: 12px;
+      border-radius: 20px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+
+    .summary-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .summary-box strong {
+      font-size: 22px;
+      letter-spacing: -.8px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel-2);
+    }
+
+    table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 950;
+      background: color-mix(in srgb, var(--blue), transparent 94%);
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .row-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #historyPrintArea { display: none; }
+
+
+    /* v3: richer dark theme + clean scrolling surface */
+    body.dark {
+      --bg: #07111f;
+      --bg-2: #17111f;
+      --text: #f8fbff;
+      --text-soft: #dbe6f5;
+      --muted: #b9c7dc;
+      --panel: rgba(14, 24, 42, .76);
+      --panel-2: rgba(22, 36, 60, .92);
+      --line: rgba(150, 203, 255, .16);
+      --line-strong: rgba(150, 203, 255, .30);
+      --shadow: 0 24px 78px rgba(0, 0, 0, .34);
+      --blue: #63b3ff;
+      --cyan: #42e3ff;
+      --orange: #ffb06b;
+      --pink: #ff75b7;
+      --violet: #a78bfa;
+      --green: #55e6a5;
+      --red: #fb7185;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(45,125,255,.24), transparent 28%),
+        radial-gradient(circle at 88% 20%, rgba(236,72,153,.18), transparent 28%),
+        radial-gradient(circle at 55% 92%, rgba(6,182,212,.18), transparent 34%),
+        linear-gradient(135deg, #07111f 0%, #0d1b31 48%, #1c1426 100%);
+      background-attachment: fixed;
+    }
+
+    body.dark .glass,
+    body.dark .topbar,
+    body.dark .section,
+    body.dark .generator,
+    body.dark .hero-card,
+    body.dark .quick-box,
+    body.dark .modal-card,
+    body.dark .login-card {
+      background:
+        linear-gradient(145deg, rgba(25, 40, 65, .86), rgba(10, 18, 32, .72));
+      border-color: rgba(150, 203, 255, .18);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .30);
+    }
+
+    body.dark .stat-card,
+    body.dark .counter-card,
+    body.dark input,
+    body.dark .pill,
+    body.dark .theme-toggle,
+    body.dark .summary-box,
+    body.dark .table-wrap {
+      background: rgba(24, 39, 65, .90);
+      border-color: rgba(150, 203, 255, .17);
+      color: var(--text);
+    }
+
+    body.dark .stat-card,
+    body.dark .counter-card {
+      box-shadow: 0 16px 38px rgba(0, 0, 0, .18);
+    }
+
+    body.dark .counter-card.active {
+      box-shadow:
+        0 20px 44px rgba(0,0,0,.25),
+        0 0 0 1px color-mix(in srgb, var(--card-a), white 18%);
+    }
+
+    body.dark .chip {
+      background: rgba(255, 255, 255, .075);
+      border-color: rgba(170, 211, 255, .16);
+      color: #dce8f7;
+    }
+
+    body.dark .btn.light {
+      background: rgba(32, 49, 78, .88);
+      color: #f8fbff;
+      border: 1px solid rgba(170, 211, 255, .17);
+    }
+
+    body.dark .empty-state {
+      background: rgba(12, 22, 39, .76);
+      border-color: rgba(170, 211, 255, .22);
+      color: #c9d6e8;
+    }
+
+    body.dark .orb {
+      opacity: .42;
+      background:
+        radial-gradient(circle at 28% 20%, rgba(255,255,255,.58), transparent 15%),
+        linear-gradient(135deg, rgba(99,179,255,.34), rgba(66,227,255,.18), rgba(255,117,183,.15));
+      box-shadow:
+        inset 20px 20px 45px rgba(255,255,255,.12),
+        0 28px 90px rgba(0,0,0,.20);
+    }
+
+    body.logged-in-view .container {
+      padding-bottom: 34px;
+    }
+
+    .app {
+      min-height: 100dvh;
+      background: transparent;
+    }
+
+    .topbar {
+      position: relative;
+      top: auto;
+    }
+
+
+
+    .admin-danger-zone {
+      margin: 28px 0 8px;
+      padding: 18px 20px;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border: 1px solid color-mix(in srgb, var(--red), transparent 72%);
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--red), transparent 93%), color-mix(in srgb, var(--orange), transparent 94%)),
+        var(--panel);
+    }
+
+    .admin-danger-zone h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.6px;
+    }
+
+    .admin-danger-zone p {
+      margin: 5px 0 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    body.dark .admin-danger-zone {
+      background:
+        linear-gradient(135deg, rgba(225, 29, 72, .13), rgba(255, 138, 61, .08)),
+        rgba(14, 24, 42, .78);
+      border-color: rgba(251, 113, 133, .24);
+    }
+
+    @media (max-width: 760px) {
+      .admin-danger-zone {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .admin-danger-zone .master-clear-btn {
+        align-self: flex-end;
+      }
+    }
+
+    .refresh-btn {
+      min-width: 96px;
+    }
+
+    .master-clear-btn {
+      border: 0;
+      outline: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px 8px 8px;
+      border-radius: 999px;
+      color: #fff;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.22), transparent 36%),
+        linear-gradient(135deg, #2a0f18, #111827);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.25),
+        0 16px 34px rgba(225, 29, 72, .22);
+      transition: transform .18s ease, box-shadow .18s ease;
+      white-space: nowrap;
+    }
+
+    .master-clear-btn:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.28),
+        0 20px 42px rgba(225, 29, 72, .30);
+    }
+
+    .clear-disc {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .5px;
+      background:
+        radial-gradient(circle at 32% 22%, rgba(255,255,255,.75), transparent 18%),
+        radial-gradient(circle at 66% 78%, rgba(255,255,255,.22), transparent 18%),
+        linear-gradient(145deg, #ff3b3b, #ef123f 52%, #bd0f2f);
+      box-shadow:
+        inset 0 4px 8px rgba(255,255,255,.34),
+        inset 0 -10px 18px rgba(96, 0, 14, .28),
+        0 7px 0 #5d1624,
+        0 14px 22px rgba(0,0,0,.26);
+      text-shadow: 0 1px 1px rgba(0,0,0,.25);
+    }
+
+    .clear-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.05;
+      font-weight: 950;
+      font-size: 13px;
+      letter-spacing: -.2px;
+    }
+
+    .clear-copy::after {
+      content: "Admin only";
+      margin-top: 4px;
+      font-size: 10px;
+      font-weight: 850;
+      color: rgba(255,255,255,.72);
+    }
+
+    @media (max-width: 760px) {
+      .master-clear-btn {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
+
+    .add-counter-form {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 260px;
+    }
+
+    .add-counter-form input {
+      height: 40px;
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .module-grid,
+    .admin-grid {
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    }
+
+    .counter-card strong {
+      word-break: break-word;
+    }
+
+    @media (max-width: 760px) {
+      .add-counter-form {
+        width: 100%;
+        min-width: 0;
+      }
+      .add-counter-form input {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 1040px) {
+      .admin-grid,
+      .module-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-strip { grid-template-columns: 1fr; }
+      .history-summary { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 760px) {
+      .topbar { position: static; flex-direction: column; align-items: stretch; }
+      .brand { min-width: 0; }
+      .top-actions { justify-content: flex-start; }
+      .gen-grid { grid-template-columns: 1fr; }
+      .admin-grid,
+      .module-grid,
+      .quick-stats { grid-template-columns: 1fr; }
+      .history-summary { grid-template-columns: repeat(2, 1fr); }
+      .section, .generator { border-radius: 24px; padding: 16px; }
+      .brand h1 { font-size: 20px; }
+    }
+
+    @page { size: A4 portrait; margin: 0; }
+
+    @media print {
+      html, body { width: 210mm; background: #fff !important; }
+      .orb { display: none !important; }
+
+      body.coupon-print-mode * { visibility: hidden !important; }
+      body.coupon-print-mode #printArea,
+      body.coupon-print-mode #printArea * { visibility: visible !important; }
+      body.coupon-print-mode #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm;
+        background: #fff;
+      }
+      body.coupon-print-mode .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        height: 297mm;
+        margin: 0;
+        padding: 6mm;
+        border: 0;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+        background: #fff !important;
+      }
+      body.coupon-print-mode .sheet:last-child { page-break-after: auto; break-after: auto; }
+
+      body.history-print-mode * { visibility: hidden !important; }
+      body.history-print-mode #historyPrintArea,
+      body.history-print-mode #historyPrintArea * { visibility: visible !important; }
+      body.history-print-mode #historyPrintArea {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm;
+        min-height: 297mm;
+        padding: 12mm;
+        background: #fff;
+        color: #000;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      body.history-print-mode #historyPrintArea h1 { margin: 0 0 4mm; font-size: 18pt; }
+      body.history-print-mode #historyPrintArea p { margin: 0 0 5mm; font-size: 10pt; }
+      body.history-print-mode #historyPrintArea table { min-width: 0; width: 100%; border-collapse: collapse; }
+      body.history-print-mode #historyPrintArea th,
+      body.history-print-mode #historyPrintArea td { border: 1px solid #111; color: #000; padding: 2.2mm; font-size: 8.5pt; }
+
+      .coupon { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+
+  <div class="app">
+    <div class="container">
+      <div id="loginWrap" class="login-wrap">
+        <div class="login-card glass">
+          <div class="login-logo"><img src="logo.webp" alt="Logo" /></div>
+          <h1>CrowdFlow Coupons</h1>
+          <p>Secure counter login for printable crowd-control coupons.</p>
+
+          <div id="loginError" class="error">Invalid username or password.</div>
+
+          <form id="loginForm">
+            <div class="field">
+              <label for="username">Username</label>
+              <input id="username" type="text" autocomplete="username" placeholder="Enter username" required />
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" type="password" autocomplete="current-password" placeholder="Enter password" required />
+            </div>
+            <button class="btn full" type="submit">Login</button>
+          </form>
+        </div>
+      </div>
+
+      <header id="topbar" class="topbar glass">
+        <div class="brand">
+          <div class="brand-logo"><img src="logo.webp" alt="Logo" /></div>
+          <div>
+            <h1>CrowdFlow Coupons</h1>
+            <span id="roleText">Counter panel</span>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+            <span>Light</span><span>Dark</span>
+          </button>
+          <button id="refreshBtn" class="btn light refresh-btn" type="button">↻ Refresh</button>
+          <span id="loggedInPill" class="pill">Logged in</span>
+          <button id="logoutBtn" class="btn light" type="button">Logout</button>
+        </div>
+      </header>
+
+      <main id="panel" class="panel">
+        <section id="heroStrip" class="hero-strip">
+          <div class="hero-card glass">
+            <h2 id="heroTitle">Admin Control Center</h2>
+            <p id="heroSub">Counters, PDFs, history and shared numbering in one clean panel.</p>
+          </div>
+          <div class="quick-stats">
+            <div class="quick-box glass">
+              <span>Total Generated</span>
+              <strong id="quickGenerated">0</strong>
+            </div>
+            <div class="quick-box glass">
+              <span>Total Downloads</span>
+              <strong id="quickDownloads">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section id="adminSection" style="display:none;">
+          <div class="section glass">
+            <div class="section-head">
+              <div>
+                <h2>Admin Dashboard</h2>
+                <p>Counter-wise totals and PDF activity.</p>
+              </div>
+            </div>
+            <div id="adminStats" class="admin-grid"></div>
+          </div>
+
+          <div class="section glass">
+            <div class="section-head">
+              <div>
+                <h2>Counter Modules</h2>
+                <p>A to J ready. Admin can add more counters anytime.</p>
+              </div>
+
+              <form id="addCounterForm" class="add-counter-form">
+                <input id="counterNameInput" type="text" maxlength="3" placeholder="New counter" />
+                <button class="btn small" type="submit">Add</button>
+              </form>
+            </div>
+
+            <div id="counterGrid" class="module-grid"></div>
+          </div>
+        </section>
+
+        <section id="generatorCard" class="generator glass">
+          <div class="section-head">
+            <div>
+              <h2 id="generatorHeading">Counter A</h2>
+              <p>Generate A4 coupons. Bigger layout: 3 per row.</p>
+            </div>
+            <span id="counterBadge" class="pill">A</span>
+          </div>
+
+          <form id="generateForm">
+            <div class="gen-grid">
+              <div>
+                <label for="couponCount">Coupons</label>
+                <input id="couponCount" type="number" min="1" max="1000" value="100" required />
+              </div>
+              <div>
+                <label for="startNumber">Start no.</label>
+                <input id="startNumber" type="number" min="1" value="1" required />
+              </div>
+              <button class="btn" type="submit">Generate</button>
+            </div>
+
+            <div class="action-row">
+              <button id="printBtn" class="btn success" type="button" style="display:none;">Print</button>
+              <button id="downloadPdfBtn" class="btn" type="button" style="display:none;">PDF</button>
+              <button id="useSavedNextBtn" class="btn light" type="button">Use next</button>
+              <button id="historyBtn" class="btn light" type="button">History</button>
+              <button id="clearHistoryBtn" class="btn danger" type="button">Clear history</button>
+              <button id="resetCounterBtn" class="btn danger" type="button">Reset no.</button>
+            </div>
+          </form>
+
+          <div id="status" class="status"></div>
+        </section>
+
+        <div id="previewTitle" class="preview-head">
+          <h2>Print Preview</h2>
+          <span id="pageInfo" class="pill">0 pages</span>
+        </div>
+
+        <div class="preview-scroll">
+          <div id="emptyState" class="empty-state">No coupons generated yet.</div>
+          <div id="printArea"></div>
+        </div>
+
+        <section id="adminDangerZone" class="admin-danger-zone glass" style="display:none;">
+          <div>
+            <h2>Admin Reset Zone</h2>
+            <p>Use only when the full coupon system needs to start fresh.</p>
+          </div>
+
+          <button id="adminMasterClearBtn" class="master-clear-btn" type="button" title="Reset all website data">
+            <span class="clear-disc">CLEAR</span>
+            <span class="clear-copy">Reset All Data</span>
+          </button>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="historyModal" class="modal-backdrop">
+    <div class="modal-card glass">
+      <div class="modal-head">
+        <div>
+          <h3 id="historyTitle">Counter History</h3>
+          <p id="historySubtitle">Saved coupon activity.</p>
+        </div>
+        <div class="top-actions">
+          <button id="historyDownloadBtn" class="btn small" type="button">History PDF</button>
+          <button id="historyPrintBtn" class="btn success small" type="button">Print</button>
+          <button id="modalClearHistoryBtn" class="btn danger small" type="button">Clear</button>
+          <button id="closeHistoryBtn" class="btn light small" type="button">Close</button>
+        </div>
+      </div>
+      <div id="historyBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="historyPrintArea"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    const USERS = {
+      a: { password: "A@123", role: "counter", counter: "A" },
+      b: { password: "B@123", role: "counter", counter: "B" },
+      c: { password: "C@123", role: "counter", counter: "C" },
+      d: { password: "D@123", role: "counter", counter: "D" },
+      e: { password: "E@123", role: "counter", counter: "E" },
+      f: { password: "F@123", role: "counter", counter: "F" },
+      g: { password: "G@123", role: "counter", counter: "G" },
+      h: { password: "H@123", role: "counter", counter: "H" },
+      i: { password: "I@123", role: "counter", counter: "I" },
+      j: { password: "J@123", role: "counter", counter: "J" },
+      admin: { password: "admin@123", role: "admin", counter: null }
+    };
+
+    const DEFAULT_COUNTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+    const CUSTOM_COUNTERS_KEY = "coupon_custom_counters_v7_dynamic";
+    let COUNTERS = loadCounters();
+    const COUPONS_PER_PAGE = 27;
+    const HISTORY_KEY = "coupon_generation_history_v7_dynamic";
+    const STATS_KEY = "coupon_lifetime_stats_v7_dynamic";
+    const THEME_KEY = "coupon_premium_theme_v7";
+
+    let currentUser = null;
+    let selectedCounter = "A";
+    let lastGenerated = [];
+    let currentCouponRecord = null;
+    let currentHistoryCounter = "A";
+    const logoCache = {};
+
+    const $ = id => document.getElementById(id);
+    const loginWrap = $("loginWrap");
+    const topbar = $("topbar");
+    const panel = $("panel");
+    const loginForm = $("loginForm");
+    const loginError = $("loginError");
+    const usernameInput = $("username");
+    const passwordInput = $("password");
+    const roleText = $("roleText");
+    const loggedInPill = $("loggedInPill");
+    const logoutBtn = $("logoutBtn");
+    const refreshBtn = $("refreshBtn");
+    const adminSection = $("adminSection");
+    const counterGrid = $("counterGrid");
+    const adminStats = $("adminStats");
+    const addCounterForm = $("addCounterForm");
+    const counterNameInput = $("counterNameInput");
+    const adminDangerZone = $("adminDangerZone");
+    const adminMasterClearBtn = $("adminMasterClearBtn");
+    const heroStrip = $("heroStrip");
+    const heroTitle = $("heroTitle");
+    const heroSub = $("heroSub");
+    const quickGenerated = $("quickGenerated");
+    const quickDownloads = $("quickDownloads");
+    const generatorCard = $("generatorCard");
+    const generatorHeading = $("generatorHeading");
+    const counterBadge = $("counterBadge");
+    const couponCount = $("couponCount");
+    const startNumber = $("startNumber");
+    const generateForm = $("generateForm");
+    const printBtn = $("printBtn");
+    const downloadPdfBtn = $("downloadPdfBtn");
+    const useSavedNextBtn = $("useSavedNextBtn");
+    const historyBtn = $("historyBtn");
+    const clearHistoryBtn = $("clearHistoryBtn");
+    const resetCounterBtn = $("resetCounterBtn");
+    const statusBox = $("status");
+    const printArea = $("printArea");
+    const emptyState = $("emptyState");
+    const previewTitle = $("previewTitle");
+    const pageInfo = $("pageInfo");
+    const themeToggle = $("themeToggle");
+    const historyModal = $("historyModal");
+    const historyTitle = $("historyTitle");
+    const historySubtitle = $("historySubtitle");
+    const historyBody = $("historyBody");
+    const closeHistoryBtn = $("closeHistoryBtn");
+    const modalClearHistoryBtn = $("modalClearHistoryBtn");
+    const historyDownloadBtn = $("historyDownloadBtn");
+    const historyPrintBtn = $("historyPrintBtn");
+    const historyPrintArea = $("historyPrintArea");
+
+    function applyTheme(theme) {
+      document.body.classList.toggle("dark", theme === "dark");
+      document.documentElement.classList.toggle("dark-theme", theme === "dark");
+      localStorage.setItem(THEME_KEY, theme);
+    }
+
+    function initTheme() {
+      applyTheme(localStorage.getItem(THEME_KEY) || "light");
+    }
+
+    // v3 fresh start: this version uses new storage keys,
+    // so previous demo history/stats/next numbers do not appear.
+
+
+    function normalizeCounterName(value) {
+      return String(value || "")
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "")
+        .slice(0, 3);
+    }
+
+    function uniqueCounters(list) {
+      const seen = new Set();
+      return list
+        .map(normalizeCounterName)
+        .filter(Boolean)
+        .filter(counter => {
+          if (seen.has(counter)) return false;
+          seen.add(counter);
+          return true;
+        });
+    }
+
+    function getCustomCounters() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(CUSTOM_COUNTERS_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function loadCounters() {
+      return uniqueCounters([...DEFAULT_COUNTERS, ...getCustomCounters()]);
+    }
+
+    function saveCustomCounters(customCounters) {
+      localStorage.setItem(CUSTOM_COUNTERS_KEY, JSON.stringify(uniqueCounters(customCounters)));
+    }
+
+    function refreshCounters() {
+      COUNTERS = loadCounters();
+      renderCounterGrid();
+      updateAdminStats();
+      updateHero();
+    }
+
+    function getLoginUser(username, password) {
+      const key = String(username || "").trim().toLowerCase();
+
+      if (USERS[key] && USERS[key].password === password) {
+        return USERS[key];
+      }
+
+      const counter = COUNTERS.find(c => c.toLowerCase() === key);
+      if (counter && password === `${counter}@123`) {
+        return { password: `${counter}@123`, role: "counter", counter };
+      }
+
+      return null;
+    }
+
+    function getCounterColors(counter) {
+      const palette = [
+        ["#2d7dff", "#06b6d4"],
+        ["#7c3aed", "#ec4899"],
+        ["#10b981", "#0ea5e9"],
+        ["#ff8a3d", "#ef4444"],
+        ["#f59e0b", "#ef4444"],
+        ["#14b8a6", "#22c55e"],
+        ["#6366f1", "#8b5cf6"],
+        ["#0ea5e9", "#2dd4bf"],
+        ["#eab308", "#f97316"],
+        ["#ec4899", "#f43f5e"]
+      ];
+      const index = Math.abs(String(counter).split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0)) % palette.length;
+      return palette[index];
+    }
+
+    function counterStyle(counter) {
+      const [a, b] = getCounterColors(counter);
+      return `--card-a:${a};--card-b:${b};`;
+    }
+
+    function renderCounterGrid() {
+      if (!counterGrid) return;
+
+      counterGrid.innerHTML = COUNTERS.map(counter => `
+        <div class="counter-card ${counter === selectedCounter ? "active" : ""}" data-counter="${counter}" style="${counterStyle(counter)}">
+          <strong>${counter}</strong>
+          <span>Counter ${counter}</span>
+          <div class="card-bottom">
+            <button class="btn light small history-open" data-history-counter="${counter}" type="button">History</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function addAdminCounter(counter) {
+      const normalized = normalizeCounterName(counter);
+
+      if (!normalized) {
+        alert("Enter a counter name. Example: K");
+        return;
+      }
+
+      const current = loadCounters();
+      if (current.includes(normalized)) {
+        alert(`Counter ${normalized} already exists.`);
+        return;
+      }
+
+      const custom = getCustomCounters();
+      custom.push(normalized);
+      saveCustomCounters(custom);
+      refreshCounters();
+      setSelectedCounter(normalized);
+
+      statusBox.style.display = "block";
+      statusBox.textContent = `Counter ${normalized} added. Login: ${normalized.toLowerCase()} / ${normalized}@123`;
+      counterNameInput.value = "";
+    }
+
+    themeToggle.addEventListener("click", () => {
+      applyTheme(document.body.classList.contains("dark") ? "light" : "dark");
+    });
+
+    function storageKey(counter) { return "coupon_next_number_v7_dynamic_" + counter; }
+
+    function getNextNumber(counter) {
+      const saved = Number(localStorage.getItem(storageKey(counter)));
+      return Number.isFinite(saved) && saved > 0 ? saved : 1;
+    }
+
+    function setNextNumber(counter, nextNumber) {
+      localStorage.setItem(storageKey(counter), String(nextNumber));
+    }
+
+    function getHistory() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) { return []; }
+    }
+
+    function saveHistory(records) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(records));
+    }
+
+    function getStats() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STATS_KEY) || "{}");
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch (e) { return {}; }
+    }
+
+    function saveStats(stats) {
+      localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+    }
+
+    function ensureCounterStats(stats, counter) {
+      if (!stats[counter]) {
+        stats[counter] = {
+          lifetimeGenerated: 0,
+          couponPdfDownloads: 0,
+          historyPdfDownloads: 0,
+          couponPrints: 0,
+          historyPrints: 0,
+          lastGeneratedAt: null,
+          lastDownloadedAt: null,
+          lastPrintedAt: null
+        };
+      }
+      return stats[counter];
+    }
+
+    function getCounterStats(counter) {
+      const stats = getStats();
+      return ensureCounterStats(stats, counter);
+    }
+
+    function updateStats(counter, updater) {
+      const stats = getStats();
+      const s = ensureCounterStats(stats, counter);
+      updater(s);
+      saveStats(stats);
+      updateAdminStats();
+    }
+
+    function addLifetimeGenerated(counter, count) {
+      updateStats(counter, s => {
+        s.lifetimeGenerated += Number(count || 0);
+        s.lastGeneratedAt = new Date().toISOString();
+      });
+    }
+
+    function addCouponPdfDownload(counter) {
+      updateStats(counter, s => {
+        s.couponPdfDownloads += 1;
+        s.lastDownloadedAt = new Date().toISOString();
+      });
+    }
+
+    function addHistoryPdfDownload(counter) {
+      updateStats(counter, s => {
+        s.historyPdfDownloads += 1;
+        s.lastDownloadedAt = new Date().toISOString();
+      });
+    }
+
+    function addCouponPrint(counter) {
+      updateStats(counter, s => {
+        s.couponPrints += 1;
+        s.lastPrintedAt = new Date().toISOString();
+      });
+    }
+
+    function addHistoryPrint(counter) {
+      updateStats(counter, s => {
+        s.historyPrints += 1;
+        s.lastPrintedAt = new Date().toISOString();
+      });
+    }
+
+    function makeId() {
+      return crypto.randomUUID ? crypto.randomUUID() : "rec_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+    }
+
+    function addHistoryRecord(counter, start, count) {
+      const record = {
+        id: makeId(),
+        counter,
+        start,
+        end: start + count - 1,
+        count,
+        user: currentUser ? currentUser.key : "unknown",
+        createdAt: new Date().toISOString()
+      };
+      const records = getHistory();
+      records.push(record);
+      saveHistory(records);
+      addLifetimeGenerated(counter, count);
+      return record;
+    }
+
+    function getCounterHistory(counter) {
+      return getHistory()
+        .filter(r => r.counter === counter)
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+
+    function findHistoryRecord(id) {
+      return getHistory().find(r => r.id === id);
+    }
+
+    function clearCounterHistory(counter) {
+      saveHistory(getHistory().filter(r => r.counter !== counter));
+    }
+
+    function visibleTotal(counter) {
+      return getCounterHistory(counter).reduce((sum, r) => sum + Number(r.count || 0), 0);
+    }
+
+    function allLifetimeTotal() {
+      return COUNTERS.reduce((sum, c) => sum + Number(getCounterStats(c).lifetimeGenerated || 0), 0);
+    }
+
+    function allDownloadTotal() {
+      return COUNTERS.reduce((sum, c) => {
+        const s = getCounterStats(c);
+        return sum + Number(s.couponPdfDownloads || 0) + Number(s.historyPdfDownloads || 0);
+      }, 0);
+    }
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleString("en-IN", {
+        day: "2-digit", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit"
+      });
+    }
+
+    function safeDateStamp() {
+      const d = new Date();
+      const pad = n => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}`;
+    }
+
+    function updateHero() {
+      if (currentUser && currentUser.role === "admin") {
+        heroStrip.style.display = "grid";
+        heroTitle.textContent = "Admin Control Center";
+        heroSub.textContent = "Counters, PDFs and shared numbering.";
+        quickGenerated.textContent = allLifetimeTotal();
+        quickDownloads.textContent = allDownloadTotal();
+      } else if (currentUser) {
+        heroStrip.style.display = "grid";
+        const c = currentUser.counter;
+        const s = getCounterStats(c);
+        heroTitle.textContent = `Counter ${c} Desk`;
+        heroSub.textContent = `Next coupon: ${c}${getNextNumber(c)}`;
+        quickGenerated.textContent = s.lifetimeGenerated || 0;
+        quickDownloads.textContent = Number(s.couponPdfDownloads || 0) + Number(s.historyPdfDownloads || 0);
+      }
+    }
+
+    function syncSelectedCounterFromStorage(showMessage = false) {
+      if (!currentUser) return;
+
+      const counter = currentUser.role === "admin" ? selectedCounter : currentUser.counter;
+      selectedCounter = counter;
+
+      generatorHeading.textContent = `Counter ${selectedCounter}`;
+      counterBadge.textContent = selectedCounter;
+      startNumber.value = getNextNumber(selectedCounter);
+
+      document.querySelectorAll(".counter-card").forEach(card => {
+        card.classList.toggle("active", card.dataset.counter === selectedCounter);
+      });
+
+      updateAdminStats();
+      updateHero();
+
+      if (historyModal.classList.contains("show")) {
+        openHistory(currentHistoryCounter);
+      }
+
+      if (showMessage) {
+        statusBox.style.display = "block";
+        statusBox.textContent = `Refreshed. Counter ${counter} next number: ${counter}${getNextNumber(counter)}`;
+      }
+    }
+
+    function clearAllWebsiteData() {
+      if (!currentUser || currentUser.role !== "admin") {
+        alert("Only admin can reset all website data.");
+        return;
+      }
+
+      const ok = confirm("Admin master clear: reset all counters, history, stats and downloads? This cannot be undone.");
+      if (!ok) return;
+
+      const finalOk = confirm("Final confirmation: all counters will start again from 1.");
+      if (!finalOk) return;
+
+      Object.keys(localStorage).forEach(key => {
+        if (
+          key.startsWith("coupon_generation_history") ||
+          key.startsWith("coupon_lifetime_stats") ||
+          key.startsWith("coupon_next_number") ||
+          key.startsWith("coupon_custom_counters")
+        ) {
+          localStorage.removeItem(key);
+        }
+      });
+
+      lastGenerated = [];
+      currentCouponRecord = null;
+      closeHistory();
+      clearPreview(false);
+      COUNTERS = loadCounters();
+      renderCounterGrid();
+      setSelectedCounter(COUNTERS[0] || "A");
+      updateAdminStats();
+      updateHero();
+
+      statusBox.style.display = "block";
+      statusBox.textContent = "All website data has been reset. All counters will start from 1.";
+    }
+
+    function updateAdminStats() {
+      if (!adminStats) return;
+      updateHero();
+
+      adminStats.innerHTML = COUNTERS.map(counter => {
+        const stats = getCounterStats(counter);
+        const downloads = Number(stats.couponPdfDownloads || 0) + Number(stats.historyPdfDownloads || 0);
+        const entries = getCounterHistory(counter).length;
+
+        return `
+          <div class="stat-card" data-counter="${counter}" style="${counterStyle(counter)}">
+            <div class="stat-top">
+              <div>
+                <h3>Counter ${counter}</h3>
+              </div>
+              <div class="counter-dot">${counter}</div>
+            </div>
+            <p class="stat-number">${stats.lifetimeGenerated || 0}</p>
+            <div class="stat-row">
+              <span class="chip">Next ${counter}${getNextNumber(counter)}</span>
+              <span class="chip">${entries} entries</span>
+              <span class="chip">${downloads} downloads</span>
+              <span class="chip">${stats.couponPrints || 0} prints</span>
+            </div>
+            <div class="card-bottom">
+              <button class="btn light small history-open" data-history-counter="${counter}" type="button">History</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function setSelectedCounter(counter) {
+      selectedCounter = normalizeCounterName(counter) || "A";
+      const colors = getCounterColors(selectedCounter);
+      generatorCard.style.setProperty("--active-a", colors[0]);
+      generatorCard.style.setProperty("--active-b", colors[1]);
+
+      generatorHeading.textContent = `Counter ${selectedCounter}`;
+      counterBadge.textContent = selectedCounter;
+      startNumber.value = getNextNumber(selectedCounter);
+      clearPreview(false);
+      renderCounterGrid();
+
+      document.querySelectorAll(".counter-card").forEach(card => {
+        card.classList.toggle("active", card.dataset.counter === selectedCounter);
+      });
+
+      updateHero();
+    }
+
+    function showApp(userKey, user) {
+      currentUser = { key: userKey, ...user };
+      document.body.classList.add("logged-in-view");
+      loginWrap.style.display = "none";
+      topbar.style.display = "flex";
+      panel.style.display = "block";
+
+      if (user.role === "admin") {
+        adminSection.style.display = "block";
+        if (adminDangerZone) adminDangerZone.style.display = "flex";
+        roleText.textContent = "Admin panel";
+        loggedInPill.textContent = "admin";
+        refreshCounters();
+        setSelectedCounter(COUNTERS[0] || "A");
+      } else {
+        adminSection.style.display = "none";
+        if (adminDangerZone) adminDangerZone.style.display = "none";
+        refreshCounters();
+        roleText.textContent = `Counter ${user.counter} panel`;
+        loggedInPill.textContent = `counter ${user.counter}`;
+        setSelectedCounter(user.counter);
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      selectedCounter = "A";
+      lastGenerated = [];
+      currentCouponRecord = null;
+      loginForm.reset();
+      clearPreview(false);
+      document.body.classList.remove("logged-in-view");
+      loginWrap.style.display = "grid";
+      topbar.style.display = "none";
+      panel.style.display = "none";
+      heroStrip.style.display = "none";
+      if (adminDangerZone) adminDangerZone.style.display = "none";
+      loginError.style.display = "none";
+      closeHistory();
+    }
+
+    loginForm.addEventListener("submit", e => {
+      e.preventDefault();
+      const username = usernameInput.value.trim().toLowerCase();
+      const password = passwordInput.value.trim();
+      const user = getLoginUser(username, password);
+
+      if (!user || user.password !== password) {
+        loginError.style.display = "block";
+        return;
+      }
+
+      loginError.style.display = "none";
+      showApp(username, user);
+    });
+
+    logoutBtn.addEventListener("click", logout);
+
+    refreshBtn.addEventListener("click", () => {
+      refreshCounters();
+      syncSelectedCounterFromStorage(true);
+    });
+
+    if (adminMasterClearBtn) {
+      adminMasterClearBtn.addEventListener("click", clearAllWebsiteData);
+    }
+
+    if (addCounterForm) {
+      addCounterForm.addEventListener("submit", e => {
+        e.preventDefault();
+        addAdminCounter(counterNameInput.value);
+      });
+    }
+
+    window.addEventListener("storage", event => {
+      if (
+        event.key &&
+        (
+          event.key.startsWith("coupon_generation_history") ||
+          event.key.startsWith("coupon_lifetime_stats") ||
+          event.key.startsWith("coupon_next_number") ||
+          event.key.startsWith("coupon_custom_counters")
+        )
+      ) {
+        syncSelectedCounterFromStorage(false);
+      }
+    });
+
+    counterGrid.addEventListener("click", e => {
+      if (e.target.closest(".history-open")) return;
+      const card = e.target.closest(".counter-card");
+      if (!card) return;
+      setSelectedCounter(card.dataset.counter);
+    });
+
+    document.addEventListener("click", e => {
+      const historyOpen = e.target.closest(".history-open");
+      if (historyOpen) {
+        e.preventDefault();
+        e.stopPropagation();
+        openHistory(historyOpen.dataset.historyCounter);
+      }
+
+      const downloadRow = e.target.closest("[data-download-record]");
+      if (downloadRow) {
+        const record = findHistoryRecord(downloadRow.dataset.downloadRecord);
+        if (record) downloadCouponsPdf(record);
+      }
+
+      const printRow = e.target.closest("[data-print-record]");
+      if (printRow) {
+        const record = findHistoryRecord(printRow.dataset.printRecord);
+        if (record) printCouponRecord(record);
+      }
+    });
+
+    function clearPreview(hideStatus = true) {
+      printArea.innerHTML = "";
+      lastGenerated = [];
+      currentCouponRecord = null;
+      printBtn.style.display = "none";
+      downloadPdfBtn.style.display = "none";
+      emptyState.style.display = "block";
+      previewTitle.style.display = "none";
+      pageInfo.textContent = "0 pages";
+
+      if (hideStatus) {
+        statusBox.style.display = "none";
+        statusBox.textContent = "";
+      }
+    }
+
+    function createCoupon(counter, number) {
+      const div = document.createElement("div");
+      div.className = "coupon";
+      div.innerHTML = `
+        <span class="letter">${counter}</span>
+        <span class="number">${number}</span>
+        <span class="full-code">${new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}</span>
+      `;
+      return div;
+    }
+
+    function renderCoupons(counter, start, count) {
+      printArea.innerHTML = "";
+      lastGenerated = [];
+
+      const totalPages = Math.ceil(count / COUPONS_PER_PAGE);
+      let currentNumber = start;
+
+      for (let page = 0; page < totalPages; page++) {
+        const sheet = document.createElement("section");
+        sheet.className = "sheet";
+        const couponsOnPage = Math.min(COUPONS_PER_PAGE, count - page * COUPONS_PER_PAGE);
+
+        for (let i = 0; i < couponsOnPage; i++) {
+          sheet.appendChild(createCoupon(counter, currentNumber));
+          lastGenerated.push(`${counter}${currentNumber}`);
+          currentNumber++;
+        }
+
+        printArea.appendChild(sheet);
+      }
+
+      emptyState.style.display = "none";
+      previewTitle.style.display = "flex";
+      pageInfo.textContent = `${totalPages} page${totalPages > 1 ? "s" : ""}`;
+      printBtn.style.display = "inline-block";
+      downloadPdfBtn.style.display = "inline-block";
+    }
+
+    generateForm.addEventListener("submit", e => {
+      e.preventDefault();
+
+      const count = Number(couponCount.value);
+      const start = Number(startNumber.value);
+
+      if (!Number.isInteger(count) || count < 1 || count > 1000) {
+        alert("Coupon count must be between 1 and 1000.");
+        return;
+      }
+
+      if (!Number.isInteger(start) || start < 1) {
+        alert("Start number must be 1 or more.");
+        return;
+      }
+
+      clearPreview(false);
+      renderCoupons(selectedCounter, start, count);
+
+      currentCouponRecord = addHistoryRecord(selectedCounter, start, count);
+
+      const next = start + count;
+      setNextNumber(selectedCounter, next);
+      startNumber.value = next;
+
+      updateAdminStats();
+
+      statusBox.style.display = "block";
+      statusBox.textContent = `${selectedCounter}${start} - ${selectedCounter}${next - 1} generated. Next: ${selectedCounter}${next}`;
+    });
+
+    printBtn.addEventListener("click", () => {
+      if (!lastGenerated.length) {
+        alert("Please generate coupons first.");
+        return;
+      }
+      addCouponPrint(selectedCounter);
+      document.body.classList.add("coupon-print-mode");
+      window.print();
+    });
+
+    downloadPdfBtn.addEventListener("click", () => {
+      if (!currentCouponRecord) {
+        alert("Please generate coupons first.");
+        return;
+      }
+      downloadCouponsPdf(currentCouponRecord);
+    });
+
+    useSavedNextBtn.addEventListener("click", () => {
+      startNumber.value = getNextNumber(selectedCounter);
+      statusBox.style.display = "block";
+      statusBox.textContent = `Next number loaded: ${selectedCounter}${startNumber.value}`;
+    });
+
+    historyBtn.addEventListener("click", () => openHistory(selectedCounter));
+
+    clearHistoryBtn.addEventListener("click", () => {
+      const records = getCounterHistory(selectedCounter);
+      if (!records.length) {
+        alert(`No history found for Counter ${selectedCounter}.`);
+        return;
+      }
+
+      const ok = confirm(`Clear visible history for Counter ${selectedCounter}? Admin lifetime stats will stay saved.`);
+      if (!ok) return;
+
+      clearCounterHistory(selectedCounter);
+      clearPreview(false);
+      updateAdminStats();
+      statusBox.style.display = "block";
+      statusBox.textContent = `Counter ${selectedCounter} history cleared. Lifetime stats are still saved.`;
+    });
+
+    resetCounterBtn.addEventListener("click", () => {
+      const ok = confirm(`Reset Counter ${selectedCounter} numbering back to 1? History will remain saved.`);
+      if (!ok) return;
+
+      setNextNumber(selectedCounter, 1);
+      startNumber.value = 1;
+      clearPreview(false);
+      updateAdminStats();
+      statusBox.style.display = "block";
+      statusBox.textContent = `Counter ${selectedCounter} numbering reset.`;
+    });
+
+    closeHistoryBtn.addEventListener("click", closeHistory);
+    historyModal.addEventListener("click", e => { if (e.target === historyModal) closeHistory(); });
+
+    modalClearHistoryBtn.addEventListener("click", () => {
+      const records = getCounterHistory(currentHistoryCounter);
+      if (!records.length) {
+        alert(`No history found for Counter ${currentHistoryCounter}.`);
+        return;
+      }
+
+      const ok = confirm(`Clear visible history for Counter ${currentHistoryCounter}? Lifetime stats will stay saved.`);
+      if (!ok) return;
+
+      clearCounterHistory(currentHistoryCounter);
+      updateAdminStats();
+      openHistory(currentHistoryCounter);
+      statusBox.style.display = "block";
+      statusBox.textContent = `Counter ${currentHistoryCounter} history cleared.`;
+    });
+
+    function openHistory(counter) {
+      currentHistoryCounter = counter;
+      const records = getCounterHistory(counter);
+      const visible = records.reduce((sum, r) => sum + Number(r.count || 0), 0);
+      const stats = getCounterStats(counter);
+      const downloads = Number(stats.couponPdfDownloads || 0) + Number(stats.historyPdfDownloads || 0);
+
+      historyTitle.textContent = `Counter ${counter} History`;
+      historySubtitle.textContent = `${records.length} entries`;
+
+      historyBody.innerHTML = `
+        <div class="history-summary">
+          <div class="summary-box"><span>Visible</span><strong>${visible}</strong></div>
+          <div class="summary-box"><span>Lifetime</span><strong>${stats.lifetimeGenerated || 0}</strong></div>
+          <div class="summary-box"><span>Downloads</span><strong>${downloads}</strong></div>
+          <div class="summary-box"><span>Entries</span><strong>${records.length}</strong></div>
+          <div class="summary-box"><span>PDFs</span><strong>${stats.couponPdfDownloads || 0}</strong></div>
+          <div class="summary-box"><span>Next</span><strong>${counter}${getNextNumber(counter)}</strong></div>
+        </div>
+
+        ${records.length ? `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Range</th>
+                  <th>Count</th>
+                  <th>User</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${records.map(r => `
+                  <tr>
+                    <td>${formatDate(r.createdAt)}</td>
+                    <td><strong>${r.counter}${r.start} - ${r.counter}${r.end}</strong></td>
+                    <td>${r.count}</td>
+                    <td>${r.user}</td>
+                    <td>
+                      <div class="row-actions">
+                        <button class="btn small" data-download-record="${r.id}" type="button">Coupon PDF</button>
+                        <button class="btn success small" data-print-record="${r.id}" type="button">Print</button>
+                      </div>
+                    </td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        ` : `<div class="empty-state">No visible history for Counter ${counter}.</div>`}
+      `;
+
+      historyDownloadBtn.style.display = records.length ? "inline-block" : "none";
+      historyPrintBtn.style.display = records.length ? "inline-block" : "none";
+      modalClearHistoryBtn.style.display = records.length ? "inline-block" : "none";
+      historyModal.classList.add("show");
+    }
+
+    function closeHistory() {
+      historyModal.classList.remove("show");
+    }
+
+    function renderHistoryPrintArea(counter) {
+      const records = getCounterHistory(counter);
+      const visible = records.reduce((sum, r) => sum + Number(r.count || 0), 0);
+
+      historyPrintArea.innerHTML = `
+        <h1>Counter ${counter} History</h1>
+        <p>Total coupons: ${visible} | Entries: ${records.length} | Printed: ${formatDate(new Date().toISOString())}</p>
+        <table>
+          <thead>
+            <tr><th>Date & Time</th><th>Range</th><th>Count</th><th>User</th></tr>
+          </thead>
+          <tbody>
+            ${records.map(r => `
+              <tr>
+                <td>${formatDate(r.createdAt)}</td>
+                <td>${r.counter}${r.start} - ${r.counter}${r.end}</td>
+                <td>${r.count}</td>
+                <td>${r.user}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    historyPrintBtn.addEventListener("click", () => {
+      renderHistoryPrintArea(currentHistoryCounter);
+      addHistoryPrint(currentHistoryCounter);
+      document.body.classList.add("history-print-mode");
+      window.print();
+    });
+
+    historyDownloadBtn.addEventListener("click", () => downloadHistoryPdf(currentHistoryCounter));
+
+    window.addEventListener("afterprint", () => {
+      document.body.classList.remove("coupon-print-mode", "history-print-mode");
+    });
+
+    function printCouponRecord(record) {
+      closeHistory();
+      setSelectedCounter(record.counter);
+      renderCoupons(record.counter, record.start, record.count);
+      currentCouponRecord = record;
+      statusBox.style.display = "block";
+      statusBox.textContent = `Loaded ${record.counter}${record.start} - ${record.counter}${record.end}.`;
+
+      setTimeout(() => {
+        addCouponPrint(record.counter);
+        document.body.classList.add("coupon-print-mode");
+        window.print();
+      }, 150);
+    }
+
+    function requirePdfLibrary() {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("PDF library is loading or internet is unavailable. Use Print and choose Save as PDF.");
+        return null;
+      }
+      return window.jspdf.jsPDF;
+    }
+
+    async function getLogoDataUrl(alpha) {
+      const key = String(alpha);
+      if (logoCache[key]) return logoCache[key];
+
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const canvas = document.createElement("canvas");
+            canvas.width = 600;
+            canvas.height = 600;
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, 600, 600);
+            ctx.globalAlpha = alpha;
+            ctx.drawImage(img, 0, 0, 600, 600);
+            const data = canvas.toDataURL("image/png");
+            logoCache[key] = data;
+            resolve(data);
+          } catch (e) { resolve(null); }
+        };
+        img.onerror = () => resolve(null);
+        img.src = "logo.webp";
+      });
+    }
+
+    async function downloadCouponsPdf(record) {
+      const jsPDF = requirePdfLibrary();
+      if (!jsPDF) return;
+
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
+      const logoFaded = await getLogoDataUrl(.09);
+      const logoCorner = await getLogoDataUrl(.92);
+
+      const pageW = 210;
+      const margin = 6;
+      const couponW = 62;
+      const couponH = 28;
+      const gap = 3;
+      const cols = 3;
+      const perPage = COUPONS_PER_PAGE;
+      const gridW = cols * couponW + (cols - 1) * gap;
+      const startX = (pageW - gridW) / 2;
+      let number = Number(record.start);
+
+      for (let i = 0; i < Number(record.count); i++) {
+        if (i > 0 && i % perPage === 0) pdf.addPage();
+
+        const localIndex = i % perPage;
+        const row = Math.floor(localIndex / cols);
+        const col = localIndex % cols;
+        const x = startX + col * (couponW + gap);
+        const y = margin + row * (couponH + gap);
+
+        pdf.setDrawColor(20, 20, 20);
+        pdf.setLineWidth(.35);
+        if (pdf.setLineDashPattern) pdf.setLineDashPattern([1.2, 1], 0);
+        pdf.roundedRect(x, y, couponW, couponH, 1.8, 1.8);
+        if (pdf.setLineDashPattern) pdf.setLineDashPattern([], 0);
+
+        if (logoFaded) { try { pdf.addImage(logoFaded, "PNG", x + 19, y + 5, 24, 16, "logoFade", "FAST"); } catch(e) {} }
+        if (logoCorner) { try { pdf.addImage(logoCorner, "PNG", x + 2, y + 1.7, 8.2, 8.2, "logoCorner", "FAST"); } catch(e) {} }
+
+        pdf.setTextColor(0,0,0);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(48);
+        pdf.text(record.counter, x + couponW / 2 - 2.2, y + couponH / 2 + 6, { align: "right" });
+        pdf.setFontSize(36);
+        pdf.text(String(number), x + couponW / 2 + 2.2, y + couponH / 2 + 6, { align: "left" });
+
+        pdf.setTextColor(85,85,85);
+        pdf.setFontSize(8);
+        const issued=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}); pdf.text(issued, x + couponW - 2, y + couponH - 2.3, { align: "right" });
+        number++;
+      }
+
+      addCouponPdfDownload(record.counter);
+      pdf.save(`coupons_${record.counter}_${record.start}-${record.end}_${safeDateStamp()}.pdf`);
+    }
+
+    async function downloadHistoryPdf(counter) {
+      const jsPDF = requirePdfLibrary();
+      if (!jsPDF) return;
+
+      const records = getCounterHistory(counter);
+      const total = records.reduce((sum, r) => sum + Number(r.count || 0), 0);
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
+      const logo = await getLogoDataUrl(.92);
+
+      function header() {
+        if (logo) { try { pdf.addImage(logo, "PNG", 174, 10, 18, 18, "historyLogo", "FAST"); } catch(e) {} }
+        pdf.setTextColor(0,0,0);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(18);
+        pdf.text(`Counter ${counter} History`, 14, 18);
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10);
+        pdf.text(`Total coupons: ${total} | Entries: ${records.length} | Downloaded: ${formatDate(new Date().toISOString())}`, 14, 26);
+      }
+
+      function tableHeader(y) {
+        pdf.setFillColor(239,246,255);
+        pdf.rect(14, y, 182, 8, "F");
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(9);
+        pdf.text("Date & Time", 16, y + 5.2);
+        pdf.text("Range", 76, y + 5.2);
+        pdf.text("Count", 128, y + 5.2);
+        pdf.text("User", 152, y + 5.2);
+      }
+
+      header();
+      let y = 34;
+      tableHeader(y);
+      y += 10;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(8.5);
+
+      records.forEach(r => {
+        if (y > 282) {
+          pdf.addPage();
+          header();
+          y = 34;
+          tableHeader(y);
+          y += 10;
+          pdf.setFont("helvetica", "normal");
+          pdf.setFontSize(8.5);
+        }
+        pdf.setDrawColor(220,226,235);
+        pdf.line(14, y + 3, 196, y + 3);
+        pdf.text(formatDate(r.createdAt), 16, y);
+        pdf.text(`${r.counter}${r.start} - ${r.counter}${r.end}`, 76, y);
+        pdf.text(String(r.count), 128, y);
+        pdf.text(String(r.user || ""), 152, y);
+        y += 8;
+      });
+
+      addHistoryPdfDownload(counter);
+      pdf.save(`history_counter_${counter}_${safeDateStamp()}.pdf`);
+    }
+
+    initTheme();
+    renderCounterGrid();
+    logout();
+  </script>
+</body>
+</html>

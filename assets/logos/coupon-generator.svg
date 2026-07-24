@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>Hidan triple-bladed scythe symbol</title>
+  <defs>
+    <linearGradient id="blade" x1="14" y1="8" x2="50" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f2f2f2"/>
+      <stop offset=".55" stop-color="#aeb4bd"/>
+      <stop offset="1" stop-color="#555c66"/>
+    </linearGradient>
+    <linearGradient id="handle" x1="31" y1="16" x2="36" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff3b43"/>
+      <stop offset="1" stop-color="#6b0710"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 14 39 57" stroke="url(#handle)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M29 16 45 10c2.5-.9 5.3-.1 7 1.9l2.4 2.9-17.8 6.5L29 16Z" fill="url(#blade)" stroke="#ff3a42" stroke-width="1.5"/>
+  <path d="M31.5 24.5 49 20c2.6-.7 5.2.3 6.8 2.4l1.9 2.6-19.8 5.2-6.4-5.7Z" fill="url(#blade)" stroke="#ff3a42" stroke-width="1.5"/>
+  <path d="M34 33 51.5 31c2.7-.3 5.1.9 6.4 3.3l1.5 2.8-20.2 2.4L34 33Z" fill="url(#blade)" stroke="#ff3a42" stroke-width="1.5"/>
+  <circle cx="31" cy="15" r="4" fill="#171719" stroke="#ff5259" stroke-width="1.5"/>
+  <path d="M39 53c-7.5 1.6-13.4-.3-17.6-5.7-3.6-4.7-5.2-10.7-4.7-18" stroke="#d8d8dc" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3" opacity=".8"/>
+  <circle cx="39" cy="57" r="3.5" fill="#171719" stroke="#ff5259" stroke-width="1.5"/>
+</svg>

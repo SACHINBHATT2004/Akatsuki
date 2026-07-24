@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="AKATSUKI unified tools dashboard.">
+  <title>AKATSUKI</title>
+  <link rel="icon" type="image/png" href="./assets/akatsuki-logo.png">
+  <link rel="stylesheet" href="./assets/hub.css">
+</head>
+<body data-page="home">
+  <div class="akatsuki-backdrop" aria-hidden="true"><img src="./assets/akatsuki-background.png" alt=""></div>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="red-orb orb-one" aria-hidden="true"></div>
+  <div class="red-orb orb-two" aria-hidden="true"></div>
+  <div class="sweep sweep-one" aria-hidden="true"></div>
+  <div class="sweep sweep-two" aria-hidden="true"></div>
+
+  <main class="shell home-shell">
+    <header class="hero-card glass">
+      <div class="hero-top">
+        <a class="brand-row" href="./index.html" aria-label="AKATSUKI home">
+          <div class="brand-logo">
+            <img src="./assets/akatsuki-logo.png" alt="AKATSUKI cloud logo">
+          </div>
+          <div class="brand-copy">
+            <div class="eyebrow">Unified operations suite</div>
+            <h1>AKATSUKI</h1>
+            <p>All tools. One place.</p>
+          </div>
+        </a>
+
+        <div class="toolbar" aria-label="Display and sound controls">
+          <button class="icon-btn" id="soundToggle" type="button" title="Sound effects" aria-label="Toggle sound">
+            <span class="icon-on" aria-hidden="true">🔊</span>
+            <span class="icon-off" aria-hidden="true">🔇</span>
+          </button>
+          <button class="icon-btn" id="themeToggle" type="button" title="Light / dark mode" aria-label="Toggle theme">☀️</button>
+        </div>
+      </div>
+
+      <div class="hero-line" aria-hidden="true"><span></span></div>
+
+      <div class="hero-bottom">
+        <div>
+          <span class="section-kicker">MODULES</span>
+          <strong>Choose a tool to continue</strong>
+        </div>
+        <div class="module-count"><b>05</b><span>Active tools</span></div>
+      </div>
+    </header>
+
+    <section class="modules-section" aria-labelledby="modulesHeading">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Dashboard</div>
+          <h2 id="modulesHeading">Open a module</h2>
+        </div>
+        <p class="section-note">Click its logo or card.</p>
+      </div>
+
+      <div class="module-grid">
+        <a class="module-card glass symbol-rinnegan" href="./module.html?module=publisher-report" data-sound="hover">
+          <div class="module-accent" aria-hidden="true"></div>
+          <div class="module-icon-wrap" title="Pain · Rinnegan"><img src="./assets/logos/publisher-report.svg" alt="Pain Rinnegan symbol"></div>
+          <div class="module-copy">
+            <div class="module-topline"><span class="badge">REPORTING</span><span class="arrow">↗</span></div>
+            <h3>Publisher Report Builder</h3>
+            <p>Publisher, registration and admission reports.</p>
+          </div>
+        </a>
+
+        <a class="module-card glass symbol-sharingan" href="./module.html?module=cgs-data-loader" data-sound="hover">
+          <div class="module-accent" aria-hidden="true"></div>
+          <div class="module-icon-wrap" title="Itachi · Sharingan"><img src="./assets/logos/cgs-data-loader.svg" alt="Itachi Sharingan symbol"></div>
+          <div class="module-copy">
+            <div class="module-topline"><span class="badge">DATA</span><span class="arrow">↗</span></div>
+            <h3>CGS &amp; Data Loader</h3>
+            <p>Upload, search and process user data.</p>
+          </div>
+        </a>
+
+        <a class="module-card glass symbol-paper" href="./module.html?module=centerly" data-sound="hover">
+          <div class="module-accent" aria-hidden="true"></div>
+          <div class="module-icon-wrap" title="Konan · Paper Flower"><img src="./assets/logos/centerly.svg" alt="Konan paper flower symbol"></div>
+          <div class="module-copy">
+            <div class="module-topline"><span class="badge">LOOKUP</span><span class="arrow">↗</span></div>
+            <h3>Centerly</h3>
+            <p>Find counsellors and their centers.</p>
+          </div>
+        </a>
+
+        <a class="module-card glass symbol-scythe" href="./module.html?module=coupon-generator" data-sound="hover">
+          <div class="module-accent" aria-hidden="true"></div>
+          <div class="module-icon-wrap" title="Hidan · Triple-bladed Scythe"><img src="./assets/logos/coupon-generator.svg" alt="Hidan triple-bladed scythe symbol"></div>
+          <div class="module-copy">
+            <div class="module-topline"><span class="badge">OPERATIONS</span><span class="arrow">↗</span></div>
+            <h3>Crowd Coupon Generator</h3>
+            <p>Create and manage counter coupons.</p>
+          </div>
+        </a>
+
+        <a class="module-card glass symbol-kakuzu" href="./module.html?module=scholarship-calculator" data-sound="hover">
+          <div class="module-accent" aria-hidden="true"></div>
+          <div class="module-icon-wrap" title="Kakuzu · Stitched Heart"><img src="./assets/logos/scholarship-calculator.svg" alt="Kakuzu stitched heart symbol"></div>
+          <div class="module-copy">
+            <div class="module-topline"><span class="badge">CALCULATOR</span><span class="arrow">↗</span></div>
+            <h3>GEU Scholarship Calculator</h3>
+            <p>Calculate eligible scholarship from marks.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="./assets/hub.js"></script>
+</body>
+</html>

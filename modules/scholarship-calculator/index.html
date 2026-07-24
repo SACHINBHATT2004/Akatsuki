@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GEU Scholarship Calculator</title>
+  <style>
+    :root{
+      --bg:#08111f;--panel:#101a34;--text:#edf3ff;--muted:#8fa4c9;--line:rgba(143,164,201,.16);
+      --accent:#3be68d;--accent2:#7c5cff;--accent3:#23c7ff;
+    }
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+      min-height:100vh;background:linear-gradient(135deg,#08111f,#0f1a35 55%,#131f44);padding:18px}
+    .app{max-width:920px;margin:0 auto;background:rgba(10,17,33,.76);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 22px 70px rgba(0,0,0,.35);backdrop-filter:blur(18px)}
+    .head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+    .eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:8px}
+    h1{margin:0;font-size:2rem;line-height:1.05}.grad{background:linear-gradient(90deg,var(--accent),var(--accent3),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    p{color:var(--muted);line-height:1.5}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+    .field{display:flex;flex-direction:column;gap:8px}.field span{font-weight:600;font-size:.95rem}
+    textarea,select,input,button{font:inherit}
+    textarea,select,input{width:100%;padding:15px 16px;border-radius:18px;border:1px solid var(--line);outline:none;background:#091121;color:var(--text)}
+    textarea{min-height:140px;resize:vertical}
+    .help{font-size:.88rem;color:var(--muted)}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    button{border:none;border-radius:18px;padding:14px 18px;cursor:pointer;font-weight:700;transition:transform .2s ease, box-shadow .2s ease}
+    .primary{background:linear-gradient(90deg,#25dfc6,#23c7ff,#7c5cff);color:#07101f;box-shadow:0 16px 32px rgba(35,199,255,.22)}
+    .ghost{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--text)}
+    button:hover{transform:translateY(-2px)}
+    .notice{margin-top:14px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted)}
+    .result{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:20px}
+    .card{padding:18px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+    .card strong{display:block;font-size:.86rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+    .big{font-size:2rem;font-weight:800}
+    .success{color:var(--accent)}
+    .loading{display:none;margin-top:18px}
+    .footer{margin-top:14px;font-size:.86rem;color:var(--muted)}
+    @media (max-width:760px){.grid{grid-template-columns:1fr}.app{padding:18px}h1{font-size:1.65rem}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="head">
+      <div>
+        <div class="eyebrow">Calculator module</div>
+        <h1>GEU <span class="grad">Scholarship Calculator</span></h1>
+        <p>Enter marks, choose course and calculate percentage with best eligible scholarship amount.</p>
+      </div>
+      <div class="notice" id="statusBox">Loading course data...</div>
+    </div>
+
+    <div class="grid">
+      <label class="field">
+        <span>Enter Marks</span>
+        <textarea id="marks" placeholder="Example: 51 46 32 78 90"></textarea>
+        <div class="help">You can paste marks separated by spaces, commas or line breaks.</div>
+      </label>
+      <div class="field">
+        <span>Select Course</span>
+        <input id="courseSearch" placeholder="Search course name...">
+        <select id="course"></select>
+        <div class="help">Course list loads from the Excel file embedded inside this module.</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="calcBtn" type="button">Calculate Scholarship</button>
+      <button class="ghost" id="resetBtn" type="button">Clear</button>
+    </div>
+
+    <div class="loading" id="loading">Calculating...</div>
+
+    <section class="result" id="result" hidden>
+      <article class="card">
+        <strong>Calculated Percentage</strong>
+        <div class="big" id="percentageValue">0%</div>
+      </article>
+      <article class="card">
+        <strong>Best Scholarship</strong>
+        <div class="big success" id="scholarshipValue">₹ 0</div>
+      </article>
+    </section>
+
+    <div class="footer">Powered by client-side Excel parsing · no separate backend required.</div>
+  </main>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script>
+    let workbook = null;
+    let courses = [];
+    const statusBox = document.getElementById('statusBox');
+    const courseSelect = document.getElementById('course');
+    const courseSearch = document.getElementById('courseSearch');
+
+    function setStatus(msg){ statusBox.textContent = msg; }
+
+    async function loadWorkbook(){
+      try{
+        const res = await fetch('./GEU-fee.xlsx');
+        const buffer = await res.arrayBuffer();
+        workbook = XLSX.read(buffer, { type: 'array' });
+        courses = workbook.SheetNames.slice();
+        renderCourses(courses);
+        setStatus('Course data ready');
+      }catch(err){
+        console.error(err);
+        setStatus('Could not load GEU-fee.xlsx');
+      }
+    }
+
+    function renderCourses(list){
+      courseSelect.innerHTML = list.map(name => `<option value="${name.replace(/"/g,'&quot;')}">${name}</option>`).join('');
+    }
+
+    function calculatePercentageFromMarks(text){
+      const numbers = String(text || '').match(/\d+(?:\.\d+)?/g) || [];
+      if (!numbers.length) return 0;
+      const values = numbers.map(Number).filter(n => !Number.isNaN(n));
+      if (!values.length) return 0;
+      const total = values.reduce((sum, n) => sum + n, 0);
+      return +(total / values.length).toFixed(2);
+    }
+
+    function getBestScholarship(course, percentage){
+      if (!workbook || !workbook.Sheets[course]) return 0;
+      const rows = XLSX.utils.sheet_to_json(workbook.Sheets[course], { header: 1, defval: '' });
+      const headerRow = rows[2] || [];
+      const scholarshipRow = rows[4] || [];
+      let best = 0;
+      for(let col = 2; col < Math.max(headerRow.length, scholarshipRow.length); col++){
+        const slabText = String(headerRow[col] ?? '');
+        const scholarshipText = String(scholarshipRow[col] ?? '');
+        const cutoffMatch = slabText.match(/>=?\s*(\d+(?:\.\d+)?)/) || slabText.match(/(\d+(?:\.\d+)?)/);
+        if (!cutoffMatch) continue;
+        const scholarshipMatch = scholarshipText.match(/(\d+(?:,\d+)?(?:\.\d+)?)/);
+        if (!scholarshipMatch) continue;
+        const cutoff = parseFloat(cutoffMatch[1]);
+        const scholarship = parseFloat(scholarshipMatch[1].replace(/,/g,''));
+        if (percentage >= cutoff) best = Math.max(best, scholarship);
+      }
+      return Math.floor(best);
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', () => {
+      const marks = document.getElementById('marks').value.trim();
+      if (!marks){ alert('Please enter marks'); return; }
+      const course = courseSelect.value;
+      const percentage = calculatePercentageFromMarks(marks);
+      const scholarship = getBestScholarship(course, percentage);
+      document.getElementById('percentageValue').textContent = percentage + '%';
+      document.getElementById('scholarshipValue').textContent = '₹ ' + scholarship.toLocaleString('en-IN');
+      document.getElementById('result').hidden = false;
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.getElementById('marks').value = '';
+      courseSearch.value = '';
+      renderCourses(courses);
+      document.getElementById('result').hidden = true;
+    });
+
+    courseSearch.addEventListener('input', () => {
+      const term = courseSearch.value.trim().toLowerCase();
+      const filtered = !term ? courses : courses.filter(c => c.toLowerCase().includes(term));
+      renderCourses(filtered);
+    });
+
+    loadWorkbook();
+  </script>
+</body>
+</html>

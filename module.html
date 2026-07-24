@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="AKATSUKI module viewer.">
+  <title>AKATSUKI</title>
+  <link rel="icon" type="image/png" href="./assets/akatsuki-logo.png">
+  <link rel="stylesheet" href="./assets/hub.css">
+</head>
+<body data-page="viewer">
+  <div class="akatsuki-backdrop" aria-hidden="true"><img src="./assets/akatsuki-background.png" alt=""></div>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="red-orb orb-one" aria-hidden="true"></div>
+  <div class="red-orb orb-two" aria-hidden="true"></div>
+
+  <main class="shell viewer-shell">
+    <header class="viewer-header glass">
+      <div class="viewer-left">
+        <a class="mini-brand" href="./index.html" aria-label="AKATSUKI home">
+          <span class="mini-brand-logo"><img src="./assets/akatsuki-logo.png" alt=""></span>
+          <span>AKATSUKI</span>
+        </a>
+
+        <a class="back-btn" href="./index.html">← Back to Modules</a>
+
+        <div class="viewer-brand">
+          <div class="viewer-logo" id="moduleLogoWrap"></div>
+          <div>
+            <div class="eyebrow">Active module</div>
+            <h1 id="moduleTitle">Loading module...</h1>
+            <p id="moduleSubtitle">Opening your tool.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <a class="open-plain-btn" id="openModuleDirect" href="#" target="_blank" rel="noopener">Open Direct ↗</a>
+        <button class="icon-btn" id="soundToggle" type="button" title="Sound effects" aria-label="Toggle sound">
+          <span class="icon-on" aria-hidden="true">🔊</span>
+          <span class="icon-off" aria-hidden="true">🔇</span>
+        </button>
+        <button class="icon-btn" id="themeToggle" type="button" title="Light / dark mode" aria-label="Toggle theme">☀️</button>
+      </div>
+    </header>
+
+    <section class="viewer-frame glass">
+      <div class="frame-loader" id="frameLoader">
+        <img src="./assets/akatsuki-logo.png" alt="">
+        <span>Opening module…</span>
+      </div>
+      <iframe id="moduleFrame" title="Module" loading="eager" allow="clipboard-read; clipboard-write; fullscreen"></iframe>
+    </section>
+  </main>
+
+  <script src="./assets/hub.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+UI refresh + sound effects
+==========================
+
+- New colorful dark/light interface inspired by the supplied Smart Excel Toolkit theme.
+- Static text has been shortened throughout the page.
+- Added responsive cards, gradient title, animated backgrounds, hover states, button shimmer, upload animation and improved table styling.
+- Added a sound toggle with lightweight Web Audio effects for hover, click, theme, drag/drop, generate, success, error and download actions.
+- Sound is generated in the browser; no audio files are needed.
+- Busy buttons now keep and restore their original icons correctly.
+- All earlier report logic, reference Excel files, embedded mappings and tests remain included.
+
+Counting logic retained
+=======================
+
+1. Enquiry -> Publisher
+2. Registration -> User Name FEE when filled; otherwise Publisher
+3. Admission -> User Name Token Fee when filled; otherwise Publisher
+
+A counsellor can therefore receive Registration/Admission counts even when another Publisher created the enquiry.
+
+2026-07-23 Type Summary update
+- Downloaded workbook now includes Sheet 2: Type Summary.
+- Sheet 2 groups by broad Type from Complete Counsellor/Consultant data, not Detailed Type.
+- It includes one pie chart image using Total = Enquiry + Registration + Admission.
+- It includes a table with Type, Enquiry, Registration, Admission, Total and Share.
+- Existing counting logic and UI are unchanged.
+- Latest 16 reference names provided by user are embedded in js/reference-data.js.
+
+2026-07-23 Universal spreadsheet upload update
+- CSV upload is now supported with quoted fields, embedded line breaks and delimiter detection.
+- Added TSV and TXT table upload.
+- Added legacy/alternate spreadsheet support: XLS, XLSB, XLT, ODS, FODS, Numbers,
+  Spreadsheet XML, SYLK, DIF, DBF, Lotus formats and spreadsheet HTML.
+- XLSX, XLSM, XLTX and XLTM remain supported.
+- File picker, drag-and-drop validation and UI text were updated.
+- Existing report counting, mapping, Type Summary chart and downloaded workbook format are unchanged.

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Find counselor centers and calculate center-wise count totals from Excel." />
+  <meta name="theme-color" content="#7562ff" />
+  <title>Centerly | Counselor Center Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="liquid-backdrop" aria-hidden="true">
+    <span class="liquid-orb orb-one"></span>
+    <span class="liquid-orb orb-two"></span>
+    <span class="liquid-orb orb-three"></span>
+    <span class="liquid-orb orb-four"></span>
+    <span class="floating-drop drop-one"></span>
+    <span class="floating-drop drop-two"></span>
+    <span class="floating-drop drop-three"></span>
+  </div>
+  <div class="noise" aria-hidden="true"></div>
+  <div id="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Centerly home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 21s7-5.1 7-11A7 7 0 1 0 5 10c0 5.9 7 11 7 11Z" stroke="currentColor" stroke-width="1.8" />
+          <circle cx="12" cy="10" r="2.7" fill="currentColor" />
+        </svg>
+      </span>
+      <span class="brand-copy">
+        <strong>Centerly</strong>
+        <small>Counselor center finder</small>
+      </span>
+    </a>
+
+    <div class="header-actions">
+      <span class="status-pill"><i></i> Directory ready</span>
+      <button id="themeToggle" class="icon-button" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20 15.2A8.2 8.2 0 0 1 8.8 4a8.2 8.2 0 1 0 11.2 11.2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> Smart center mapping</div>
+      <h1>Find every center.<br /><em>See every total.</em></h1>
+      <p>Search counselor names or upload a count sheet. Centerly matches the records, groups totals by center, and prepares a clean Excel summary.</p>
+      <div class="hero-flow" aria-label="How Centerly works">
+        <span><b>1</b> Add names</span>
+        <i aria-hidden="true"></i>
+        <span><b>2</b> Match centers</span>
+        <i aria-hidden="true"></i>
+        <span><b>3</b> Export totals</span>
+      </div>
+    </section>
+
+    <section class="stat-grid" aria-label="Directory summary">
+      <article class="stat-card stat-violet">
+        <span class="stat-icon violet" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
+        </span>
+        <div><strong id="counselorCount">0</strong><span>Counselors</span></div>
+        <span class="stat-watermark" aria-hidden="true"></span>
+      </article>
+      <article class="stat-card stat-cyan">
+        <span class="stat-icon cyan" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0Z" stroke="currentColor" stroke-width="1.7" /><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.7" /></svg>
+        </span>
+        <div><strong id="centerCount">0</strong><span>Centers</span></div>
+        <span class="stat-watermark" aria-hidden="true"></span>
+      </article>
+      <article class="stat-card stat-orange">
+        <span class="stat-icon orange" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="m9 11 3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </span>
+        <div><strong id="selectedCount">0</strong><span>Matched now</span></div>
+        <span class="stat-watermark" aria-hidden="true"></span>
+      </article>
+    </section>
+
+    <section class="workspace-card lookup-card">
+      <div class="workspace-heading">
+        <div class="heading-copy">
+          <span class="section-label"><i>01</i> COUNSELOR LOOKUP</span>
+          <h2>Enter counselor names</h2>
+          <p>Type one or multiple names and separate them with commas.</p>
+        </div>
+        <span class="section-orb orb-violet" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" /><path d="m20 20-3.4-3.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </span>
+      </div>
+
+      <div class="input-label-row">
+        <label for="nameInput">Counselor names</label>
+        <span><kbd>Tab</kbd> accepts the highlighted suggestion</span>
+      </div>
+
+      <div id="inputWrap" class="smart-input-wrap">
+        <div class="input-leading" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" /><path d="m20 20-3.4-3.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </div>
+        <textarea id="nameInput" rows="3" spellcheck="false" autocomplete="off" placeholder="Enter counselor names separated by commas"></textarea>
+        <button id="clearInput" class="clear-input" type="button" aria-label="Clear all names" title="Clear all">
+          <svg viewBox="0 0 24 24" fill="none"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+        <div id="suggestionBox" class="suggestion-box" role="listbox" aria-label="Counselor suggestions" hidden></div>
+      </div>
+
+      <div class="helper-row">
+        <p><span class="helper-dot"></span> Any capitalization and extra spaces are accepted.</p>
+        <span id="inputCounter">0 names entered</span>
+      </div>
+
+      <div class="action-row">
+        <button id="findButton" class="primary-button" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" /><path d="m20 20-3.4-3.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+          Find centers
+        </button>
+        <button id="resetButton" class="secondary-button" type="button">Reset</button>
+      </div>
+    </section>
+
+    <section id="resultsSection" class="results-section" hidden>
+      <div class="results-header">
+        <div class="heading-copy">
+          <span class="section-label"><i>✓</i> SEARCH RESULTS</span>
+          <h2>Matched counselors</h2>
+          <p>Your matched names and assigned centers.</p>
+        </div>
+        <div class="result-actions">
+          <button id="copyButton" class="compact-button" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7" /><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.7" /></svg>
+            Copy
+          </button>
+          <button id="downloadButton" class="compact-button" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-strip">
+        <div><span class="summary-check">✓</span><strong id="matchedSummary">0</strong> matched</div>
+        <div><span class="summary-warn">!</span><strong id="unmatchedSummary">0</strong> unmatched</div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Counselor</th>
+                <th>Center</th>
+                <th>Match</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="unmatchedCard" class="unmatched-card" hidden>
+        <div class="unmatched-icon">!</div>
+        <div>
+          <strong>Could not confidently match</strong>
+          <p id="unmatchedNames"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace-card count-card">
+      <div class="workspace-heading">
+        <div class="heading-copy">
+          <span class="section-label"><i>02</i> CENTER TOTALS</span>
+          <h2>Upload name + count sheet</h2>
+          <p>The first column is read as counselor name and the second as count.</p>
+        </div>
+        <span class="section-orb orb-cyan" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0 4.5 4.5M12 4 7.5 8.5M4 17.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+
+      <input id="countFileInput" type="file" accept=".xlsx,.xls,.csv" hidden />
+      <div id="dropZone" class="upload-panel" tabindex="0" role="button" aria-label="Upload Excel or CSV file">
+        <div class="upload-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0 4.5 4.5M12 4 7.5 8.5M4 17.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="upload-copy">
+          <h3>Drop Excel here or choose a file</h3>
+          <p>Center totals are calculated automatically after the file is selected.</p>
+        </div>
+        <button id="chooseFileButton" class="secondary-button" type="button">Choose Excel</button>
+      </div>
+      <div class="helper-row upload-helper">
+        <p><span class="helper-dot cyan-dot"></span> Supports .xlsx, .xls and .csv</p>
+        <span id="fileStatus">No file selected</span>
+      </div>
+    </section>
+
+    <section id="countResultsSection" class="results-section count-results" hidden>
+      <div class="results-header">
+        <div class="heading-copy">
+          <span class="section-label"><i>03</i> CENTER SUMMARY</span>
+          <h2>Counts grouped by center</h2>
+          <p>Review center totals and download the formatted Excel file.</p>
+        </div>
+        <div class="result-actions">
+          <button id="copyCenterSummaryButton" class="compact-button" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7" /><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.7" /></svg>
+            Copy
+          </button>
+          <button id="downloadCenterCsvButton" class="compact-button download-excel-button" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            Download Excel
+          </button>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <article class="metric-purple"><span>Total count</span><strong id="grandTotalMetric">0</strong></article>
+        <article class="metric-blue"><span>Matched rows</span><strong id="matchedRowsMetric">0</strong></article>
+        <article class="metric-orange"><span>Unmatched rows</span><strong id="unmatchedRowsMetric">0</strong></article>
+        <article class="metric-pink"><span>Top center</span><strong id="topCenterMetric">—</strong></article>
+      </div>
+
+      <div class="count-layout">
+        <div class="chart-card horizontal-summary-card">
+          <div class="chart-heading">
+            <div>
+              <strong>Center totals</strong>
+              <small>Swipe or scroll to explore</small>
+            </div>
+            <span id="chartSubtext">Scroll horizontally to view all centers</span>
+          </div>
+          <div id="centerChart" class="center-chart horizontal-center-chart"></div>
+        </div>
+
+        <div class="table-card center-summary-table">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Center</th>
+                  <th>Total Count</th>
+                  <th>Rows</th>
+                  <th>Share</th>
+                </tr>
+              </thead>
+              <tbody id="centerSummaryBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <details id="matchedDetailsPanel" class="details-panel">
+        <summary><span>View matched row details</span></summary>
+        <div class="table-card nested-table">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Row</th>
+                  <th>Input Name</th>
+                  <th>Matched Counselor</th>
+                  <th>Center</th>
+                  <th>Count</th>
+                  <th>Match</th>
+                </tr>
+              </thead>
+              <tbody id="matchedCountBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+
+      <div id="countUnmatchedCard" class="unmatched-card" hidden>
+        <div class="unmatched-icon">!</div>
+        <div>
+          <strong>Data not found / needs review</strong>
+          <p>These rows were not included in center totals.</p>
+          <div id="countUnmatchedList" class="unmatched-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Centerly · Your counselor directory</span>
+      <span>Processing stays inside your browser.</span>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="counselors.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js" defer onerror="window.XLSX_LOAD_FAILED=true"></script>
+  <script src="app.js"></script>
+</body>
+</html>
