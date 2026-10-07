@@ -42,6 +42,12 @@
       subtitle: 'Scholarship and marks calculator',
       path: './modules/scholarship-calculator/index.html',
       logo: './assets/logos/scholarship-calculator.svg'
+    },
+    'excel-date-updater': {
+      title: 'Excel Date Updater',
+      subtitle: 'Write dates into matching Excel rows by ID',
+      path: './modules/excel-date-updater/index.html',
+      logo: './assets/logos/excel-date-updater.svg'
     }
   });
 
@@ -198,6 +204,12 @@
     });
     document.addEventListener('keydown',function(event){
       if (event.key === 'Escape') closeAkatsukiAudioModal();
+    });
+
+    // Keep the header in step when a module (same site) changes theme or sound
+    window.addEventListener('storage',function(event){
+      if (event.key === themeKey && event.newValue) setTheme(event.newValue);
+      if (event.key === soundKey) syncSound();
     });
 
     akatsukiTrack.addEventListener('ended',function(){

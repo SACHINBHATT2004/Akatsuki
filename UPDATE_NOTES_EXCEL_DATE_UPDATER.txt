@@ -1,0 +1,23 @@
+EXCEL DATE UPDATER — NEW MODULE (7th)
+
+Added
+- modules/excel-date-updater/ : the new module.
+- assets/logos/excel-date-updater.svg : module symbol (calendar with red seal),
+  drawn in the same dark-metal / red style as the other symbols.
+- Dashboard card "Excel Date Updater" (badge DATES). Active tools count 06 -> 07.
+
+Small shared changes
+- assets/hub.js : added the module to moduleMap, and the hub header now follows
+  theme/sound changes made inside a module (storage event). No other logic changed.
+- assets/hub.css : one new line, .symbol-seal accent colour.
+- module.html : iframe allow list now includes "microphone" so voice input works
+  inside the viewer. Existing modules are unaffected.
+
+Not changed
+- All six existing module folders.
+
+Verified
+- Hub shows 7 cards; module opens in the viewer.
+- Upload, groups, process, download work inside the iframe.
+- Theme and sound toggles stay in sync between hub header and module, both ways.
+- Module unit tests pass (14).

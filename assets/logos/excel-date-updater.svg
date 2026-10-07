@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>Blood-seal calendar symbol</title>
+  <defs>
+    <linearGradient id="slab" x1="12" y1="10" x2="46" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4c555e"/>
+      <stop offset=".55" stop-color="#22282f"/>
+      <stop offset="1" stop-color="#0b0e12"/>
+    </linearGradient>
+    <linearGradient id="band" x1="10" y1="14" x2="48" y2="22" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7b0710"/>
+      <stop offset="1" stop-color="#ff3038"/>
+    </linearGradient>
+    <radialGradient id="ink" cx="45%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#ff5a61"/>
+      <stop offset=".6" stop-color="#d4141e"/>
+      <stop offset="1" stop-color="#7b0710"/>
+    </radialGradient>
+    <filter id="s" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".55"/>
+    </filter>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- calendar slab -->
+  <rect x="9" y="13" width="38" height="38" rx="7" fill="url(#slab)" stroke="#85909c" stroke-width="1.6" filter="url(#s)"/>
+  <path d="M9 20a7 7 0 0 1 7-7h24a7 7 0 0 1 7 7v4H9z" fill="url(#band)"/>
+  <path d="M18 9v8M38 9v8" stroke="#c9d1da" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- day grid -->
+  <g fill="#7d8894">
+    <rect x="14" y="29" width="4.5" height="4" rx="1"/>
+    <rect x="21.5" y="29" width="4.5" height="4" rx="1"/>
+    <rect x="29" y="29" width="4.5" height="4" rx="1"/>
+    <rect x="36.5" y="29" width="4.5" height="4" rx="1"/>
+    <rect x="14" y="36" width="4.5" height="4" rx="1"/>
+    <rect x="21.5" y="36" width="4.5" height="4" rx="1"/>
+    <rect x="14" y="43" width="4.5" height="4" rx="1"/>
+  </g>
+  <rect x="29" y="36" width="4.5" height="4" rx="1" fill="#ff3d45"/>
+
+  <!-- red ink seal -->
+  <g filter="url(#glow)" transform="rotate(-12 45 45)">
+    <circle cx="45" cy="45" r="12.5" fill="url(#ink)" stroke="#ff9aa0" stroke-width="1.3"/>
+    <circle cx="45" cy="45" r="9" stroke="#ffd6d8" stroke-opacity=".75" stroke-width="1.2" stroke-dasharray="2.4 1.8"/>
+    <path d="M40 45.2l3.4 3.4L50.4 41.4" stroke="#fff4f4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <circle cx="56" cy="56.5" r="1.6" fill="#d4141e"/>
+  <circle cx="53" cy="60" r="1" fill="#d4141e" opacity=".8"/>
+</svg>

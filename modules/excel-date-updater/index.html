@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Excel Date Updater · AKATSUKI</title>
+  <meta name="description" content="Upload an Excel sheet, enter or speak IDs, pick a date, and write it into the matching rows.">
+  <link rel="icon" type="image/svg+xml" href="../../assets/logos/excel-date-updater.svg">
+  <script>
+    // Inside AKATSUKI: share theme and sound settings with the hub (same localStorage keys)
+    window.DATESTAMP_CONFIG = {
+      themeKey: 'akatsuki_hub_theme',
+      soundKey: 'akatsuki_hub_sound',
+      defaultTheme: 'dark',
+      allowAuto: false
+    };
+    // Apply the saved theme before paint
+    (function () {
+      var cfg = window.DATESTAMP_CONFIG || {};
+      var c;
+      try { c = localStorage.getItem(cfg.themeKey || 'datestamp-theme'); } catch (e) {}
+      if (c !== 'light' && c !== 'dark' && !(c === 'auto' && cfg.allowAuto !== false)) {
+        c = cfg.allowAuto === false ? (cfg.defaultTheme || 'dark') : 'auto';
+      }
+      var t = c === 'auto'
+        ? (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : c;
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.setAttribute('data-theme-choice', c);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/akatsuki.css">
+</head>
+<body>
+  <!-- decorative water bubbles -->
+  <div class="ocean" aria-hidden="true">
+    <span class="bubble b1"></span><span class="bubble b2"></span><span class="bubble b3"></span>
+    <span class="bubble b4"></span><span class="bubble b5"></span><span class="bubble b6"></span>
+    <span class="bubble b7"></span><span class="bubble b8"></span>
+  </div>
+
+  <div class="shell">
+    <header class="topbar glass">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true">
+          <img src="../../assets/logos/excel-date-updater.svg" alt="">
+        </div>
+        <div class="brand__text">
+          <p class="brand__name">Excel Date Updater</p>
+          <p class="brand__tag">Write one date into many rows of your Excel sheet, matched by ID</p>
+        </div>
+      </div>
+
+      <div class="topbar__actions">
+        <div class="thememenu">
+          <button type="button" class="pill" id="themeBtn" aria-haspopup="menu" aria-expanded="false">
+            <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></svg>
+            <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"></path></svg>
+            <span id="themeLabel">Light</span>
+            <svg class="ic-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+          </button>
+          <div class="menu glass" id="themeMenu" role="menu" hidden>
+            <button type="button" role="menuitemradio" data-choice="light">Light</button>
+            <button type="button" role="menuitemradio" data-choice="dark">Dark</button>
+            <button type="button" role="menuitemradio" data-choice="auto">Match device</button>
+          </div>
+        </div>
+        <button type="button" class="roundbtn" id="soundBtn" aria-pressed="true" aria-label="Turn sounds off" title="Sounds on" data-sound="none">
+          <svg class="ic-sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"></path></svg>
+          <svg class="ic-sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"></path><path d="M16 9.5l5 5M21 9.5l-5 5"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="wrap">
+
+      <!-- STEP 1 -->
+      <section class="step glass" id="step1" aria-labelledby="s1title">
+        <header class="step__head">
+          <span class="step__num" aria-hidden="true">1</span>
+          <div>
+            <h2 class="step__title" id="s1title">Upload your Excel file</h2>
+            <p class="step__sub">Upload the file that contains the IDs you want to match.</p>
+          </div>
+        </header>
+        <fieldset class="step__body">
+          <div class="upload">
+            <label class="dropzone" id="dropzone" for="fileInput">
+              <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls,.csv,.ods" hidden>
+              <svg class="dropzone__icon" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M15 34h-2a9 9 0 0 1-1.2-17.9A12 12 0 0 1 35 14.2 8.5 8.5 0 0 1 35.5 34H33"></path>
+                <path d="M24 40V22M17.5 28.5L24 22l6.5 6.5"></path>
+              </svg>
+              <span class="dropzone__title">Drop your Excel file here</span>
+              <span class="dropzone__or">or click to browse</span>
+              <span class="dropzone__types">.xlsx, .xls, .csv or .ods</span>
+              <span class="btn btn--grad btn--sm dropzone__btn">Browse File</span>
+              <span class="dropzone__private">Your file stays on this computer. Nothing is uploaded to a server.</span>
+            </label>
+
+            <div class="filecard" id="fileCard" hidden>
+              <div class="filecard__file">
+                <span class="filecard__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="M4 9h16M4 15h16M10 3v18"></path></svg>
+                </span>
+                <div>
+                  <p class="filecard__name" id="fileName">file.xlsx</p>
+                  <p class="filecard__meta" id="rowCount">0 rows</p>
+                </div>
+              </div>
+              <div class="filecard__controls">
+                <label class="field field--inline" id="sheetField">
+                  <span class="field__label">Sheet</span>
+                  <span class="select"><select id="sheetSelect"></select></span>
+                </label>
+                <label class="field field--inline">
+                  <span class="field__label">Header row</span>
+                  <input type="number" class="input input--num" id="headerRow" min="1" value="1" inputmode="numeric">
+                </label>
+                <button type="button" class="btn btn--glass btn--sm" id="changeFile">Change file</button>
+              </div>
+            </div>
+
+            <div class="cube" aria-hidden="true">
+              <div class="cube__glass">
+                <div class="cube__tile">
+                  <svg viewBox="0 0 40 40"><rect x="7" y="6" width="26" height="28" rx="4"></rect><path d="M7 14h26M7 22h26M7 30h26M17 6v28"></path></svg>
+                </div>
+              </div>
+              <span class="cube__drop d1"></span>
+              <span class="cube__drop d2"></span>
+              <span class="cube__drop d3"></span>
+            </div>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="step glass is-locked" id="step2" aria-labelledby="s2title">
+        <header class="step__head">
+          <span class="step__num" aria-hidden="true">2</span>
+          <div>
+            <h2 class="step__title" id="s2title">Choose the two columns</h2>
+          </div>
+        </header>
+        <fieldset class="step__body" id="step2body" disabled>
+          <div class="colpick">
+            <label class="panel field">
+              <span class="field__label">Primary matching column</span>
+              <span class="field__help">The column that holds the IDs you will type or speak, such as Merit ID or Student ID.</span>
+              <span class="select select--icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20V10M12 20V4M18 20v-7"></path></svg>
+                <select id="primaryCol"><option value="">Select column…</option></select>
+              </span>
+              <span class="field__sample" id="primarySample"></span>
+            </label>
+            <div class="colpick__arrow" aria-hidden="true">
+              <svg viewBox="0 0 40 24"><path d="M3 12h32M27 4l8 8-8 8"></path></svg>
+            </div>
+            <label class="panel field">
+              <span class="field__label">Secondary update column</span>
+              <span class="field__help">The column where the selected date will be written for every matching row.</span>
+              <span class="select select--icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg>
+                <select id="secondaryCol"><option value="">Select column…</option></select>
+              </span>
+              <span class="field__sample" id="secondarySample"></span>
+            </label>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="step glass is-locked" id="step3" aria-labelledby="s3title">
+        <header class="step__head">
+          <span class="step__num" aria-hidden="true">3</span>
+          <div>
+            <h2 class="step__title" id="s3title">Add IDs and a date for each group</h2>
+            <p class="step__sub">Each group gets its own date. Add as many groups as you need, then write them all into the sheet at once.</p>
+          </div>
+        </header>
+        <fieldset class="step__body" id="step3body" disabled>
+          <div class="voicerow">
+            <span class="field__label">Voice language</span>
+            <span class="select select--icon select--pill">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"></path></svg>
+              <select id="micLang" aria-label="Voice language">
+                <option value="en-IN">English (India)</option>
+                <option value="hi-IN">Hindi</option>
+                <option value="en-US">English (US)</option>
+              </select>
+            </span>
+            <p class="voicehelp" id="voiceHelp">Say “one zero two one comma one zero three zero”. “Comma” starts the next ID, “double five” becomes 55.</p>
+          </div>
+
+          <div class="groups" id="groups"></div>
+
+          <details class="opts">
+            <summary>Date format and options for all groups</summary>
+            <div class="opts__grid">
+              <label class="field">
+                <span class="field__label">Format</span>
+                <span class="select">
+                  <select id="dateFormat">
+                    <option value="dd-mm-yyyy">07-10-2026</option>
+                    <option value="dd/mm/yyyy">07/10/2026</option>
+                    <option value="dd-mmm-yyyy">07-Oct-2026</option>
+                    <option value="yyyy-mm-dd">2026-10-07</option>
+                    <option value="mm/dd/yyyy">10/07/2026</option>
+                  </select>
+                </span>
+              </label>
+              <label class="field">
+                <span class="field__label">Save as</span>
+                <span class="select">
+                  <select id="writeAs">
+                    <option value="date">Real Excel date (sortable, filterable)</option>
+                    <option value="text">Plain text</option>
+                  </select>
+                </span>
+              </label>
+            </div>
+            <label class="check">
+              <input type="checkbox" id="skipFilled">
+              <span>Leave cells that already had a value in the uploaded file unchanged</span>
+            </label>
+          </details>
+
+          <div class="actionbar">
+            <button type="button" class="btn btn--glass" id="addGroup" data-sound="add">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>
+              Add another group
+            </button>
+            <div class="actionbar__go">
+              <span class="actionbar__hint" id="applyHint">Add IDs to a group to continue.</span>
+              <button type="button" class="btn btn--grad btn--lg" id="applyBtn" disabled data-sound="none">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6zM18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"></path></svg>
+                <span>Process and Update</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      </section>
+
+      <template id="groupTpl">
+        <article class="group">
+          <header class="group__head">
+            <h3 class="group__title">Group <span class="group__n">1</span></h3>
+            <button type="button" class="iconbtn group__remove" data-sound="remove" aria-label="Remove group">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"></path></svg>
+            </button>
+          </header>
+          <div class="group__body">
+            <div class="group__ids">
+              <span class="field__label">IDs (comma separated)</span>
+              <div class="idbox">
+                <textarea class="group__text input" rows="4" spellcheck="false" autocomplete="off"
+                  placeholder="e.g. 1021, 1030, 1050"></textarea>
+                <div class="idbox__tools">
+                  <button type="button" class="mic" aria-pressed="false" data-sound="none">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"></path></svg>
+                    <span class="mic__text">Speak IDs</span>
+                  </button>
+                  <button type="button" class="linkbtn group__clear">Clear</button>
+                </div>
+              </div>
+              <p class="heard" hidden></p>
+            </div>
+            <div class="group__date">
+              <label class="field">
+                <span class="field__label">Date to write</span>
+                <span class="dateinput">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg>
+                  <input type="date" class="group__dateinput input">
+                </span>
+              </label>
+              <p class="group__datehelp"></p>
+              <div class="quickdates">
+                <button type="button" class="chipbtn" data-offset="0">Today</button>
+                <button type="button" class="chipbtn" data-offset="-1">Yesterday</button>
+                <button type="button" class="chipbtn" data-offset="1">Tomorrow</button>
+              </div>
+            </div>
+          </div>
+          <footer class="group__foot">
+            <p class="group__summary">0 IDs added</p>
+            <div class="chips" aria-live="polite"></div>
+          </footer>
+        </article>
+      </template>
+
+      <!-- STEP 4 -->
+      <section class="step glass is-locked" id="step4" aria-labelledby="s4title">
+        <header class="step__head">
+          <span class="step__num" aria-hidden="true">4</span>
+          <div>
+            <h2 class="step__title" id="s4title">Check the changes and download</h2>
+          </div>
+        </header>
+        <div class="step__body">
+          <p class="empty" id="resultEmpty">After you press Process and Update, every changed row appears here. You can keep editing groups and process again; the sheet is rebuilt from your uploaded file each time, so nothing is written twice.</p>
+
+          <div class="result" id="result" hidden>
+            <div class="stats">
+              <div class="stat stat--ok"><span class="stat__n" id="stRows">0</span><span class="stat__l">rows updated</span></div>
+              <div class="stat"><span class="stat__n" id="stGroups">0</span><span class="stat__l">groups written</span></div>
+              <div class="stat stat--bad"><span class="stat__n" id="stMissing">0</span><span class="stat__l">IDs not found</span></div>
+              <div class="stat"><span class="stat__n" id="stSkipped">0</span><span class="stat__l">skipped, already filled</span></div>
+            </div>
+
+            <p class="notice" id="overlapNote" hidden></p>
+
+            <ol class="groupsum" id="groupSummary"></ol>
+
+            <div class="missing" id="missingBox" hidden>
+              <div class="missing__head">
+                <p>These IDs were not found in the primary column:</p>
+                <button type="button" class="btn btn--glass btn--sm" id="copyMissing">Copy IDs</button>
+              </div>
+              <div class="missing__list" id="missingList"></div>
+            </div>
+
+            <div class="tablewrap" id="tableWrap">
+              <table class="changes">
+                <thead><tr><th>Row</th><th>ID</th><th>Group</th><th>Before</th><th>After</th></tr></thead>
+                <tbody id="changesBody"></tbody>
+              </table>
+            </div>
+            <p class="tablenote" id="tableNote"></p>
+          </div>
+
+          <div class="downloadbar" id="downloadBar" hidden>
+            <div>
+              <p class="downloadbar__title" id="dlTitle">Ready to download</p>
+              <p class="downloadbar__meta" id="dlMeta"></p>
+            </div>
+            <button type="button" class="btn btn--grad" id="downloadBtn" data-sound="none">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"></path></svg>
+              <span id="dlBtnText">Download updated Excel</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@ Included modules:
 - Centerly
 - Crowd Coupon Generator
 - GEU Scholarship Calculator
+- Excel Date Updater
 
 This update:
 - Added Smart Excel Toolkit as the sixth module.
@@ -25,6 +26,10 @@ Module symbols:
 - Centerly — Konan / Paper Flower
 - Crowd Coupon Generator — Hidan / Triple-bladed Scythe
 - GEU Scholarship Calculator — Kakuzu / Stitched Heart
+- Excel Date Updater — Blood Seal / Calendar Stamp (original symbol)
+
+Latest update: Excel Date Updater added as the seventh module.
+See UPDATE_NOTES_EXCEL_DATE_UPDATER.txt.
 
 GITHUB PAGES:
 Upload the contents of this folder to the repository root, then use:
